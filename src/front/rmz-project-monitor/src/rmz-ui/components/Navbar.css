@@ -1,0 +1,57 @@
+.navbar {
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 4rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 2em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.navbar-logo span {
+    color: var(--blue);
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+}
+
+.navbar-links a {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+}
+
+.navbar-links a:hover {
+    color: var(--text)
+}
+
+.navbar-links a.cta {
+    color: var(--blue);
+    border: 1px solid var(--border);
+    padding: 0.4rem 1.2rem;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+}
+
+.navbar-links a.cta:hover {
+    background: var(--blue-glow);
+    border-color: var(--blue);
+}

@@ -1,20 +1,23 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css'
+import Header from './components/Header/Header.tsx'
+import Footer from './rmz-ui/components/Footer.tsx'
+import Dashboard from './pages/Dashboard/Dashboard.tsx'
+import Projects from './pages/Projects/Projects.tsx';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <p>Header</p>
+    <BrowserRouter>
+      <Header />
       <main>
-        <p>MAIN CONTENT</p>
+        <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/projects" element={<Projects />} />
+        </Routes>
       </main>
-      <p>Footer</p>
-    </>
+      <Footer />
+    </BrowserRouter>
   )
 }
 

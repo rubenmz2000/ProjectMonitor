@@ -1,0 +1,31 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.dashboard-card {
+    width: 500px;
+    height: 600px;
+    margin: 10px 0;
+}
+
+.card-container {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.project-card {
+    background: var(--bg-surface) !important;
+    width: 400px;
+    padding: 10px;
+}
