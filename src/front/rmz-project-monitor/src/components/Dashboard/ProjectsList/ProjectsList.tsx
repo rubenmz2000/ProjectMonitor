@@ -5,10 +5,28 @@ import './../../../pages/Dashboard/Dashboard.css';
 import type {Project} from '../../../models/ProjectModel.ts';
 import {getLatestProjects} from '../../../serivces/ApiService.ts';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import CreateProjectDialog from '../../Dialogs/CreateProject/CreateProjectDialog.tsx'
 
 function ProjectsList() {
     const [projects, setProjects] = useState<Project[]>([]);
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const handleClickOpen = () => {
+        setDialogOpen(true);
+    };
+    const handleClose = (result) => {
+        if (result === 'cancel')
+            alert('CANCELAO')
+        else if (result === 'submit')
+            alert('SUBMITAO')
+        else
+            alert('AAAA PRINGAO, HA FALLAO')
+        setDialogOpen(false);
+    };
+    
+    dayjs.extend(utc);
     dayjs.extend(relativeTime);
     
     useEffect( () => {
@@ -27,14 +45,15 @@ function ProjectsList() {
                     <Card key={index} className={'project-card'}>
                         <Typography variant={"h6"}>{project.name}</Typography>
                         <Typography variant={"body2"}>{project.status}</Typography>
-                        <Typography variant={'body2'}>{dayjs(project.updatedAt).fromNow()}</Typography>
+                        <Typography variant={'body2'}>{dayjs.utc(project.updatedAt).local().fromNow()}</Typography>
                     </Card>
                 ))}
-                <Button sx={{ height: '70px', fontFamily: 'Rajdhani', fontSize: '1.5rem' }} variant={"contained"}>
+                <Button sx={{ height: '70px', fontFamily: 'Rajdhani', fontSize: '1.5rem' }} onClick={() => handleClickOpen()} variant={"contained"}>
                     <AddIcon sx={{ marginRight: '10px' }} /> Add Project
                 </Button>
             </div>
         </div>
+        <CreateProjectDialog open={dialogOpen} onClose={handleClose} />
     </>
 }
 

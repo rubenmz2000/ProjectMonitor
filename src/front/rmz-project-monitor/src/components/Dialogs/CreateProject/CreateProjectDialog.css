@@ -1,0 +1,10 @@
+.create-dialog {
+    backdrop-filter: blur(8px)
+}
+
+.create-dialog-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 10px;
+}
