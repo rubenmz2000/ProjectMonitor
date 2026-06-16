@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectMonitor.Core", "src\back\ProjectMonitor.Core\ProjectMonitor.Core.csproj", "{FF0C25A4-2014-4DA7-A7A5-C078CF94A434}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectMonitor.DataAccess", "src\back\ProjectMonitor.DataAccess\ProjectMonitor.DataAccess.csproj", "{72D9D7FF-8342-42C6-9E0C-94E0DF72F457}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectMonitor.API", "src\back\ProjectMonitor.API\ProjectMonitor.API.csproj", "{29788BD4-83B9-4C70-AD3A-C061B98B1D90}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF0C25A4-2014-4DA7-A7A5-C078CF94A434}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF0C25A4-2014-4DA7-A7A5-C078CF94A434}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF0C25A4-2014-4DA7-A7A5-C078CF94A434}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF0C25A4-2014-4DA7-A7A5-C078CF94A434}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72D9D7FF-8342-42C6-9E0C-94E0DF72F457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72D9D7FF-8342-42C6-9E0C-94E0DF72F457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72D9D7FF-8342-42C6-9E0C-94E0DF72F457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72D9D7FF-8342-42C6-9E0C-94E0DF72F457}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29788BD4-83B9-4C70-AD3A-C061B98B1D90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29788BD4-83B9-4C70-AD3A-C061B98B1D90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29788BD4-83B9-4C70-AD3A-C061B98B1D90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29788BD4-83B9-4C70-AD3A-C061B98B1D90}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
