@@ -4,7 +4,13 @@ import type StatusCount from '../../../models/StatusCount.ts';
 import {useState, useEffect} from 'react'
 import {getStatusCount} from '../../../serivces/ApiService.ts'
 
-const COLORS = ['#2f80ed', '#555555', '#e74c3c'];
+const COLORS = {
+    NotStarted: '#555555',
+    InProgress: '#2f80ed',
+    Paused: '#e74c3c',
+    Completed : '#27ae60',
+    Archived: '#2c3e50'
+};
 
 function StatusGraphic() {
     const [data, setData] = useState<{ name: string, count: number }[]>([]);
@@ -25,7 +31,7 @@ function StatusGraphic() {
                 <PieChart width={500} height={500}>
                     <Pie data={data} dataKey="count" cx="50%" cy="50%" outerRadius={100} label={({ name, count }) => `${name}: ${count}`}>
                         {data.map((entry, index) => (
-                            <Cell key={index} fill={COLORS[index]} />
+                            <Cell key={index} fill={COLORS[entry.name]} />
                         ))}                    
                     </Pie>
                     <Tooltip />

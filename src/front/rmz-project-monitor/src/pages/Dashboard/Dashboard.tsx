@@ -1,9 +1,10 @@
 import ProjectsList from './../../components/Dashboard/ProjectsList/ProjectsList.tsx'
 import StatusGraphic from './../../components/Dashboard/StatusGraphic/StatusGraphic.tsx'
 import './Dashboard.css'
-import {Card} from "@mui/material";
+import {Card, Alert} from "@mui/material";
+import {useState} from 'react';
 
-function Dashboard() {
+function Dashboard(alert) {
     return <>
         <div className={'dashboard-container'}>
             <Card className={'dashboard-card'}>
