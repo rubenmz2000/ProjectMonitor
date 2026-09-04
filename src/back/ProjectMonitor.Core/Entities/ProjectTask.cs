@@ -4,6 +4,7 @@ namespace ProjectMonitor.Core.Entities;
 public class ProjectTask
 {
     public Guid Id { get; set; }
+    public int TaskNumber { get; set; }
     public required string Title { get; set; }
     public required string Description { get; set; }
     public ProjectTaskStatus Status { get; set; }

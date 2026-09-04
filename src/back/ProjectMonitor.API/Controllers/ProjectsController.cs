@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectMonitor.Core;
@@ -8,7 +7,7 @@ using ProjectMonitor.Core.Enums;
 
 namespace ProjectMonitor.API.Controllers;
 
-[Route("/api/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class ProjectsController(IRepository<Project> projectRepository) : ControllerBase
 {
@@ -22,6 +21,7 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
                 Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
+                TaskPrefix = p.TaskPrefix,
                 Status = p.Status,
                 UpdatedAt = p.UpdatedAt
             })
@@ -33,7 +33,15 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
     {
         var project = projectRepository.GetById(id);
         if (project == null) return NotFound();
-        return Ok(project);
+        return Ok(new ProjectResponseDto
+        {
+            Id = project.Id,
+            Name = project.Name,
+            Description = project.Description,
+            TaskPrefix = project.TaskPrefix,
+            Status = project.Status,
+            UpdatedAt = project.UpdatedAt
+        });
     }
 
     [HttpGet("latest")]
@@ -47,6 +55,7 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
                 Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
+                TaskPrefix = p.TaskPrefix,
                 Status = p.Status,
                 UpdatedAt = p.UpdatedAt
             })
@@ -73,12 +82,26 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
         if (alreadyCreated)
             return BadRequest("This project is already created");
         
+        // Auto-generate TaskPrefix if empty or null
+        var taskPrefix = string.IsNullOrWhiteSpace(projectDto.TaskPrefix) 
+            ? GenerateTaskPrefix(projectDto.Name) 
+            : projectDto.TaskPrefix;
+        
+        // Normalize to uppercase and remove non-alphanumeric characters
+        taskPrefix = new string(taskPrefix.ToUpperInvariant().Where(char.IsLetterOrDigit).Take(5).ToArray());
+        
+        // Validate TaskPrefix uniqueness
+        var prefixExists = projectRepository.GetAll(p => p.TaskPrefix == taskPrefix && !p.IsDeleted).Any();
+        if (prefixExists)
+            return BadRequest($"Task prefix '{taskPrefix}' is already in use. Please choose a different one.");
+        
         var now = DateTime.UtcNow;
         var project = new Project
         {
             Id = Guid.NewGuid(),
             Name = projectDto.Name,
             Description = projectDto.Description,
+            TaskPrefix = taskPrefix,
             CreationDate = now,
             UpdatedAt = now,
             Status = ProjectStatus.NotStarted,
@@ -99,6 +122,23 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
             return StatusCode(500, "There was a problem storing the project on the database");
         }
     }
+    
+    private string GenerateTaskPrefix(string projectName)
+    {
+        var words = projectName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        
+        if (words.Length > 1)
+        {
+            // Multiple words: take initials
+            return new string(words.Select(w => w[0]).Take(5).ToArray());
+        }
+        else
+        {
+            // Single word: take first 3 characters
+            var cleanName = new string(projectName.Where(char.IsLetterOrDigit).ToArray());
+            return cleanName.Length >= 3 ? cleanName[..3] : cleanName;
+        }
+    }
 
     [HttpPut("{id:guid}")]
     public IActionResult Update(Guid id, [FromBody] CreateProjectDto projectDto)
@@ -107,6 +147,7 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
         if (project == null) return NotFound();
         project.Name = projectDto.Name;
         project.Description = projectDto.Description;
+        project.TaskPrefix = projectDto.TaskPrefix.ToUpperInvariant();
         project.UpdatedAt = DateTime.UtcNow;
         return Ok(projectRepository.SaveChanges());
     }
