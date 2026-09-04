@@ -1,13 +1,14 @@
-import {useState, useEffect, useCallback} from 'react'
-import {Button, Card, Typography, CircularProgress, Alert, Box} from "@mui/material";
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { Button, Card, Typography, CircularProgress, Alert, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import './Projects.css'
-import type {Project} from '../../models/ProjectModel.ts';
-import {getAllProjects} from '../../serivces/ApiService.ts';
+import './Projects.css';
+import type { Project } from '../../models/ProjectModel.ts';
+import { getAllProjects } from '../../serivces/ApiService.ts';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import CreateProjectDialog from '../../components/Dialogs/CreateProject/CreateProjectDialog.tsx'
+import CreateProjectDialog from '../../components/Dialogs/CreateProject/CreateProjectDialog.tsx';
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
@@ -16,6 +17,7 @@ function Projects({ triggerAlert }: { triggerAlert: (message: string, severity?:
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const handleClickOpen = () => {
@@ -49,6 +51,10 @@ function Projects({ triggerAlert }: { triggerAlert: (message: string, severity?:
         fetchProjects();
     }, [fetchProjects]);
 
+    const handleProjectClick = (projectId: string) => {
+        navigate(`/projects/${projectId}/tasks`);
+    };
+
     return <>
         <div className={'card-container'}>
             <Typography variant={'h5'}>All Projects</Typography>
@@ -70,8 +76,13 @@ function Projects({ triggerAlert }: { triggerAlert: (message: string, severity?:
                     </Typography>
                 ) : (
                     projects.map((project) => (
-                        <Card key={project.id} className={'project-card'}>
-                            <Typography variant={"h6"}>{project.name}</Typography>
+                        <Card 
+                            key={project.id} 
+                            className={'project-card'}
+                            onClick={() => handleProjectClick(project.id)}
+                            sx={{ cursor: 'pointer', '&:hover': { boxShadow: 4 } }}
+                        >
+                            <Typography variant={"h6"}>{project.name} ({project.taskPrefix})</Typography>
                             <Typography variant={"body2"}>{project.status}</Typography>
                             <Typography variant={'body2'}>{dayjs.utc(project.updatedAt).local().fromNow()}</Typography>
                         </Card>

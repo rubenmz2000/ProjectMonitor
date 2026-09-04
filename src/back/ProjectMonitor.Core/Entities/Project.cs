@@ -7,6 +7,7 @@ public class Project
     public Guid Id { get; set; }
     public required string Name { get; set; } 
     public required string Description  { get; set; }
+    public required string TaskPrefix { get; set; }
     public ProjectStatus Status { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime UpdatedAt { get; set; }
