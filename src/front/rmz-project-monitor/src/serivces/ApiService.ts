@@ -14,7 +14,7 @@ export const getStatusCount = async (): Promise<StatusCount[]> => {
     return response.data;
 }
 
-export const addProject = async (project: {name: string, description: string}): Promise<boolean> => {
+export const addProject = async (project: Record<string, FormDataEntryValue>): Promise<boolean> => {
     try {
         await axios.post(`${API_URL}/Projects`, project);
         return true;

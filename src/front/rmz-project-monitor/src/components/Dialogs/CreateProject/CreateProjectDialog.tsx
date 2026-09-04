@@ -18,10 +18,7 @@ export default function CreateProjectDialog({open, onClose}: {open: boolean, onC
         const fromJson = Object.fromEntries(formData.entries());
         
         try {
-            await addProject({
-                name: String(fromJson.name || ''),
-                description: String(fromJson.description || '')
-            });
+            await addProject(fromJson);
             onClose("submit");
         } catch (e) {
             onClose("error");
