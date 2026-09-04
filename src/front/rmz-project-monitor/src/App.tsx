@@ -38,7 +38,8 @@ function App() {
       </main>
       <Footer />
 
-        <Snackbar className={"alert"}
+        <Snackbar className="alert"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             open={alert.open}
             autoHideDuration={4000}
             onClose={handleCloseAlert}
