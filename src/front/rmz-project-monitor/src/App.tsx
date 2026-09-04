@@ -33,12 +33,13 @@ function App() {
       <main>
         <Routes>
             <Route path="/" element={<Dashboard triggerAlert={triggerAlert} />} />
-            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects" element={<Projects triggerAlert={triggerAlert} />} />
         </Routes>
       </main>
       <Footer />
 
-        <Snackbar className={"alert"}
+        <Snackbar className="alert"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             open={alert.open}
             autoHideDuration={4000}
             onClose={handleCloseAlert}

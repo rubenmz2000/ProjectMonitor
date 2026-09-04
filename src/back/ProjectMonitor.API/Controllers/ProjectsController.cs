@@ -15,7 +15,17 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(projectRepository.GetAll(p => !p.IsDeleted).ToList());
+        return Ok(projectRepository.GetAll(p => !p.IsDeleted)
+            .OrderByDescending(p => p.UpdatedAt)
+            .Select(p => new ProjectResponseDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Status = p.Status,
+                UpdatedAt = p.UpdatedAt
+            })
+            .ToList());
     }
 
     [HttpGet("{id:guid}")]

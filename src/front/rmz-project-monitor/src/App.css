@@ -6,9 +6,6 @@ main {
 }
 
 .alert {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 70px;
+    bottom: 70px !important;
     z-index: 9999;
 }
