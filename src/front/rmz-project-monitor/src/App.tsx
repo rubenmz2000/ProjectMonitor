@@ -33,7 +33,7 @@ function App() {
       <main>
         <Routes>
             <Route path="/" element={<Dashboard triggerAlert={triggerAlert} />} />
-            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects" element={<Projects triggerAlert={triggerAlert} />} />
         </Routes>
       </main>
       <Footer />
