@@ -2,6 +2,7 @@ import axios from 'axios';
 import type {Project} from '../models/ProjectModel.ts';
 import type {StatusCount} from '../models/StatusCount.ts';
 import type {ProjectTask} from '../models/ProjectTaskModel.ts';
+import type { TaskDetailData } from '../models/TaskDetailModel.ts';
 
 const API_URL = 'http://localhost:5023/api';
 
@@ -48,4 +49,9 @@ export const createTask = async (projectId: string, task: Record<string, unknown
         const message = error instanceof Error ? error.message : "Server error";
         throw message;
     }
+}
+
+export const getIssueByTaskIdentifier = async (taskIdentifier: string): Promise<TaskDetailData> => {
+    const response = await axios.get(`${API_URL}/issues/${taskIdentifier}`);
+    return response.data;
 }
