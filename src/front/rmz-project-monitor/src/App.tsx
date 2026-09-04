@@ -32,7 +32,7 @@ function App() {
       <Header />
       <main>
         <Routes>
-            <Route path="/" element={<Dashboard alert={triggerAlert} />} />
+            <Route path="/" element={<Dashboard triggerAlert={triggerAlert} />} />
             <Route path="/projects" element={<Projects />} />
         </Routes>
       </main>

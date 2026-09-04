@@ -9,7 +9,7 @@ import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import CreateProjectDialog from '../../Dialogs/CreateProject/CreateProjectDialog.tsx'
 
-function ProjectsList({ alert }: { alert: (message: string, severity?: string) => void }) {
+function ProjectsList({ triggerAlert }: { triggerAlert: (message: string, severity?: string) => void }) {
     const [projects, setProjects] = useState<Project[]>([]);
 
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -20,9 +20,9 @@ function ProjectsList({ alert }: { alert: (message: string, severity?: string) =
         if (result === 'cancel') {
             // User cancelled, no action needed
         } else if (result === 'submit') {
-            alert('Project created successfully');
+            triggerAlert('Project created successfully');
         } else {
-            alert('An error occurred while creating the project', 'error');
+            triggerAlert('An error occurred while creating the project', 'error');
         }
         setDialogOpen(false);
     };
