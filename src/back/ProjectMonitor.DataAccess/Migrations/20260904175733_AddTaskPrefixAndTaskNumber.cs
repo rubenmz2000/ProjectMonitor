@@ -10,14 +10,16 @@ namespace ProjectMonitor.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_ProjectTask_ProjectId_TaskIdentifier",
-                table: "Tasks");
+            // Add TaskPrefix column to Projects table
+            migrationBuilder.AddColumn<string>(
+                name: "TaskPrefix",
+                table: "Projects",
+                type: "nvarchar(5)",
+                maxLength: 5,
+                nullable: false,
+                defaultValue: "");
 
-            migrationBuilder.DropColumn(
-                name: "TaskIdentifier",
-                table: "Tasks");
-
+            // Add TaskNumber column to Tasks table
             migrationBuilder.AddColumn<int>(
                 name: "TaskNumber",
                 table: "Tasks",
@@ -25,12 +27,19 @@ namespace ProjectMonitor.DataAccess.Migrations
                 nullable: false,
                 defaultValue: 0);
 
+            // Drop the existing non-unique index on ProjectId
+            migrationBuilder.DropIndex(
+                name: "IX_Tasks_ProjectId",
+                table: "Tasks");
+
+            // Create unique composite index (ProjectId, TaskNumber)
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectTask_ProjectId_TaskNumber",
                 table: "Tasks",
                 columns: new[] { "ProjectId", "TaskNumber" },
                 unique: true);
 
+            // Create unique filtered index on TaskPrefix
             migrationBuilder.CreateIndex(
                 name: "IX_Project_TaskPrefix",
                 table: "Projects",
@@ -42,31 +51,31 @@ namespace ProjectMonitor.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_ProjectTask_ProjectId_TaskNumber",
-                table: "Tasks");
-
+            // Drop unique filtered index on TaskPrefix
             migrationBuilder.DropIndex(
                 name: "IX_Project_TaskPrefix",
                 table: "Projects");
 
+            // Drop unique composite index (ProjectId, TaskNumber)
+            migrationBuilder.DropIndex(
+                name: "IX_ProjectTask_ProjectId_TaskNumber",
+                table: "Tasks");
+
+            // Recreate the original non-unique index on ProjectId
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_ProjectId",
+                table: "Tasks",
+                column: "ProjectId");
+
+            // Drop TaskNumber column
             migrationBuilder.DropColumn(
                 name: "TaskNumber",
                 table: "Tasks");
 
-            migrationBuilder.AddColumn<string>(
-                name: "TaskIdentifier",
-                table: "Tasks",
-                type: "nvarchar(50)",
-                maxLength: 50,
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProjectTask_ProjectId_TaskIdentifier",
-                table: "Tasks",
-                columns: new[] { "ProjectId", "TaskIdentifier" },
-                unique: true);
+            // Drop TaskPrefix column
+            migrationBuilder.DropColumn(
+                name: "TaskPrefix",
+                table: "Projects");
         }
     }
 }
