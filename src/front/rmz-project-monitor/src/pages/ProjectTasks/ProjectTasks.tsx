@@ -116,7 +116,12 @@ function ProjectTasks({ triggerAlert }: { triggerAlert: (message: string, severi
                             </Typography>
                         ) : (
                             tasks.map((task) => (
-                                <Card key={task.id} className={'project-card'}>
+                                <Card
+                                    key={task.id}
+                                    className={'project-card'}
+                                    sx={{ cursor: 'pointer' }}
+                                    onClick={() => navigate(`/issues/${task.taskIdentifier}`)}
+                                >
                                     <Typography variant={"h6"}>{task.taskIdentifier}</Typography>
                                     <Typography variant={"subtitle1"}>{task.title}</Typography>
                                     <Typography variant={"body2"}>Status: {task.status}</Typography>

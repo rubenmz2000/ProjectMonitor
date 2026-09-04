@@ -6,6 +6,7 @@ import Footer from './rmz-ui/components/Footer.tsx'
 import Dashboard from './pages/Dashboard/Dashboard.tsx'
 import Projects from './pages/Projects/Projects.tsx';
 import ProjectTasks from './pages/ProjectTasks/ProjectTasks.tsx';
+import TaskDetail from './pages/TaskDetail/TaskDetail.tsx';
 import {Alert, Snackbar} from '@mui/material';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path="/" element={<Dashboard triggerAlert={triggerAlert} />} />
             <Route path="/projects" element={<Projects triggerAlert={triggerAlert} />} />
             <Route path="/projects/:projectId/tasks" element={<ProjectTasks triggerAlert={triggerAlert} />} />
+            <Route path="/issues/:taskIdentifier" element={<TaskDetail />} />
         </Routes>
       </main>
       <Footer />

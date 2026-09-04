@@ -1,0 +1,29 @@
+.task-detail-container {
+    padding: 20px;
+}
+
+.task-detail-container .back-button {
+    margin-bottom: 16px;
+}
+
+.task-detail-container .detail-header {
+    margin-bottom: 24px;
+}
+
+.task-detail-container .detail-card {
+    padding: 24px;
+}
+
+.task-detail-container .detail-field {
+    margin-bottom: 16px;
+}
+
+.task-detail-container .detail-field-label {
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.task-detail-container .description-text {
+    white-space: pre-wrap;
+    margin-top: 8px;
+}
