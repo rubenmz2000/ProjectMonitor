@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import CreateTaskDialog from '../../components/Dialogs/CreateTask/CreateTaskDialog.tsx';
+import './ProjectTasks.css';
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
@@ -83,7 +84,7 @@ function ProjectTasks({ triggerAlert }: { triggerAlert: (message: string, severi
                     </Button>
                 </Alert>
             ) : !project ? (
-                <Typography variant="body1" sx={{ py: 4, textAlign: 'center', color: 'text.secondary' }}>
+                <Typography variant="body1" className="empty-state" sx={{ py: 4, textAlign: 'center' }}>
                     Project not found.
                 </Typography>
             ) : (
@@ -93,7 +94,7 @@ function ProjectTasks({ triggerAlert }: { triggerAlert: (message: string, severi
                             <Typography variant={'h4'}>
                                 {project.name} ({project.taskPrefix})
                             </Typography>
-                            <Typography variant={'body2'} color="text.secondary">
+                            <Typography variant={'body2'} className="empty-state">
                                 {project.description}
                             </Typography>
                         </Box>
@@ -110,7 +111,7 @@ function ProjectTasks({ triggerAlert }: { triggerAlert: (message: string, severi
                     
                     <div className={'projects-list'}>
                         {tasks.length === 0 ? (
-                            <Typography variant="body1" sx={{ py: 4, textAlign: 'center', color: 'text.secondary' }}>
+                            <Typography variant="body1" className="empty-state" sx={{ py: 4, textAlign: 'center' }}>
                                 No tasks yet. Create your first task to get started.
                             </Typography>
                         ) : (
