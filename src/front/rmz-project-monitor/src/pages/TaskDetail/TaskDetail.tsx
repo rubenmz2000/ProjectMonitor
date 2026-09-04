@@ -111,7 +111,7 @@ function TaskDetail() {
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Created:</Typography>
                             <Typography component="span">
-                                {dayjs.utc(task.createdAt).local().fromNow()}
+                                {dayjs.utc(task.creationDate).local().fromNow()}
                             </Typography>
                         </Box>
 

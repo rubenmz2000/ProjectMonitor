@@ -7,7 +7,7 @@ export interface TaskDetailData {
   status: string;
   priority: string;
   dueDate: string | null;
-  createdAt: string;
+  creationDate: string;
   updatedAt: string;
   projectName: string;
   taskPrefix: string;
