@@ -1,4 +1,4 @@
-import { ProjectStatus } from './enums/ProjectStatus.ts';
+import {ProjectStatus} from './enums/ProjectStatus.ts';
 
 export interface StatusCount {
     status: ProjectStatus,

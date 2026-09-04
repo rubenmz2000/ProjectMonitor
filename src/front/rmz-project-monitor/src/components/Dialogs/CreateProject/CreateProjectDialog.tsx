@@ -10,18 +10,21 @@ import './CreateProjectDialog.css';
 import '../../../rmz-ui/rmz-theme.css';
 import {addProject} from '../../../serivces/ApiService.ts'
 
-export default function CreateProjectDialog({open, onClose}) {
+export default function CreateProjectDialog({open, onClose}: {open: boolean, onClose: (result: string) => void}) {
     
-    const HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const HandleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const fromJson = Object.fromEntries(formData.entries());
         
         try {
-            addProject(fromJson);
+            await addProject({
+                name: String(fromJson.name || ''),
+                description: String(fromJson.description || '')
+            });
             onClose("submit");
         } catch (e) {
-            alert(`Error: ${e}`)
+            onClose("error");
         }
     }
     return <>
