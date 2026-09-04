@@ -1,10 +1,10 @@
 import {Typography} from "@mui/material";
 import { PieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
-import type StatusCount from '../../../models/StatusCount.ts';
+import type {StatusCount} from '../../../models/StatusCount.ts';
 import {useState, useEffect} from 'react'
 import {getStatusCount} from '../../../serivces/ApiService.ts'
 
-const COLORS = {
+const COLORS: Record<string, string> = {
     NotStarted: '#555555',
     InProgress: '#2f80ed',
     Paused: '#e74c3c',
@@ -17,7 +17,7 @@ function StatusGraphic() {
     
     useEffect(() => {
         const fetchCount = async () => {
-            const count = await getStatusCount();
+            const count: StatusCount[] = await getStatusCount();
             const mapped = count.map((d: StatusCount) => ({name: d.status, count: d.count})).filter((d) => d.count > 0);
             setData(mapped);
         }
@@ -29,7 +29,7 @@ function StatusGraphic() {
             <Typography variant={'h5'}>Projects Status</Typography>
             <div>
                 <PieChart width={500} height={500}>
-                    <Pie data={data} dataKey="count" cx="50%" cy="50%" outerRadius={100} label={({ name, count }) => `${name}: ${count}`}>
+                    <Pie data={data} dataKey="count" cx="50%" cy="50%" outerRadius={100} label={({ name }) => `${name}`}>
                         {data.map((entry, index) => (
                             <Cell key={index} fill={COLORS[entry.name]} />
                         ))}                    

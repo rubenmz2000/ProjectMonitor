@@ -14,7 +14,7 @@ function App() {
         severity: 'success'
     });
     
-    const triggerAlert = (message, severity = 'success') => {
+    const triggerAlert = (message: string, severity: string = 'success') => {
         setAlert({
             open: true,
             message: message,
@@ -22,7 +22,7 @@ function App() {
         });
     }
     
-    const handleCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    const handleCloseAlert = (_event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') return;
         setAlert(prev => ({ ...prev, open: false }));
     }
@@ -32,7 +32,7 @@ function App() {
       <Header />
       <main>
         <Routes>
-            <Route path="/" element={<Dashboard alert={triggerAlert} />} />
+            <Route path="/" element={<Dashboard triggerAlert={triggerAlert} />} />
             <Route path="/projects" element={<Projects />} />
         </Routes>
       </main>
@@ -43,7 +43,7 @@ function App() {
             autoHideDuration={4000}
             onClose={handleCloseAlert}
         >
-            <Alert severity={alert.severity} variant={"filled"}>{alert.message}</Alert> 
+            <Alert severity={alert.severity as 'success' | 'error' | 'info' | 'warning'} variant={"filled"}>{alert.message}</Alert> 
         </Snackbar>
     </BrowserRouter>
   )
