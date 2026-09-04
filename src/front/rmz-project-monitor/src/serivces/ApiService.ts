@@ -9,6 +9,11 @@ export const getLatestProjects = async (): Promise<Project[]> => {
     return response.data;
 }
 
+export const getAllProjects = async (): Promise<Project[]> => {
+    const response = await axios.get(`${API_URL}/Projects`);
+    return response.data;
+}
+
 export const getStatusCount = async (): Promise<StatusCount[]> => {
     const response = await axios.get(`${API_URL}/Projects/status-count`);
     return response.data;
