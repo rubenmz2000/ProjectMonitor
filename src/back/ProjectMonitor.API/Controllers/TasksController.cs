@@ -9,7 +9,7 @@ namespace ProjectMonitor.API.Controllers;
 
 [Route("api/projects/{projectId:guid}/tasks")]
 [ApiController]
-public class TasksController(IRepository<Project> projectRepository, IRepository<ProjectTask> taskRepository) : ControllerBase
+public class TasksController(IRepository<Project> projectRepository, IRepository<ProjectTask> taskRepository, IRepository<Actor> actorRepository) : ControllerBase
 {
     [HttpGet]
     public IActionResult GetTasks(Guid projectId)
@@ -18,6 +18,8 @@ public class TasksController(IRepository<Project> projectRepository, IRepository
         if (project == null) return NotFound();
 
         var tasks = taskRepository.GetAll(t => t.ProjectId == projectId && !t.IsDeleted)
+            .Include(t => t.CreatedBy)
+            .Include(t => t.Assignee)
             .OrderBy(t => t.TaskNumber)
             .Select(t => new TaskResponseDto
             {
@@ -30,7 +32,21 @@ public class TasksController(IRepository<Project> projectRepository, IRepository
                 Priority = t.Priority,
                 DueDate = t.DueDate,
                 CreationDate = t.CreationDate,
-                UpdatedAt = t.UpdatedAt
+                UpdatedAt = t.UpdatedAt,
+                CreatedBy = new ActorDto
+                {
+                    Id = t.CreatedBy.Id,
+                    DisplayName = t.CreatedBy.DisplayName,
+                    Identifier = t.CreatedBy.Identifier,
+                    Kind = t.CreatedBy.Kind.ToString()
+                },
+                Assignee = t.Assignee != null ? new ActorDto
+                {
+                    Id = t.Assignee.Id,
+                    DisplayName = t.Assignee.DisplayName,
+                    Identifier = t.Assignee.Identifier,
+                    Kind = t.Assignee.Kind.ToString()
+                } : null
             })
             .ToList();
 
@@ -42,6 +58,14 @@ public class TasksController(IRepository<Project> projectRepository, IRepository
     {
         var project = projectRepository.GetById(projectId);
         if (project == null) return NotFound("Project not found");
+
+        // Resolve actor from header
+        var actorIdentifier = Request.Headers["X-Actor-Identifier"].FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(actorIdentifier))
+            return BadRequest("Missing X-Actor-Identifier header");
+
+        var actor = actorRepository.GetAll(a => a.Identifier == actorIdentifier && a.IsActive).FirstOrDefault();
+        if (actor == null) return NotFound("Actor not found");
 
         // Generate TaskNumber using MAX+1 strategy
         var allTasksForProject = taskRepository.GetAll(t => t.ProjectId == projectId).ToList();
@@ -63,6 +87,8 @@ public class TasksController(IRepository<Project> projectRepository, IRepository
             Priority = taskDto.Priority,
             DueDate = taskDto.DueDate ?? DateTime.MinValue,
             ProjectId = projectId,
+            CreatedById = actor.Id,
+            AssigneeId = null,
             CreationDate = now,
             UpdatedAt = now,
             IsDeleted = false
@@ -85,7 +111,15 @@ public class TasksController(IRepository<Project> projectRepository, IRepository
                     Priority = task.Priority,
                     DueDate = task.DueDate == DateTime.MinValue ? null : task.DueDate,
                     CreationDate = task.CreationDate,
-                    UpdatedAt = task.UpdatedAt
+                    UpdatedAt = task.UpdatedAt,
+                    CreatedBy = new ActorDto
+                    {
+                        Id = actor.Id,
+                        DisplayName = actor.DisplayName,
+                        Identifier = actor.Identifier,
+                        Kind = actor.Kind.ToString()
+                    },
+                    Assignee = null
                 };
                 return CreatedAtAction(nameof(GetTasks), new { projectId }, response);
             }

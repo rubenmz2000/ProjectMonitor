@@ -18,4 +18,8 @@ public class TaskDetailResponseDto
     // Project context
     public string ProjectName { get; set; } = string.Empty;
     public string TaskPrefix { get; set; } = string.Empty;
+
+    // Actor context
+    public ActorDto CreatedBy { get; set; } = null!;
+    public ActorDto? Assignee { get; set; }
 }

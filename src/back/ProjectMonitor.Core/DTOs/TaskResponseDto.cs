@@ -14,4 +14,6 @@ public class TaskResponseDto
     public DateTime? DueDate { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public ActorDto CreatedBy { get; set; } = null!;
+    public ActorDto? Assignee { get; set; }
 }

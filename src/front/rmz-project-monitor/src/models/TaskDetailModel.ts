@@ -1,3 +1,10 @@
+export interface Actor {
+  id: string;
+  displayName: string;
+  identifier: string;
+  kind: string;
+}
+
 export interface TaskDetailData {
   id: string;
   taskNumber: number;
@@ -11,4 +18,6 @@ export interface TaskDetailData {
   updatedAt: string;
   projectName: string;
   taskPrefix: string;
+  createdBy: Actor;
+  assignee: Actor | null;
 }

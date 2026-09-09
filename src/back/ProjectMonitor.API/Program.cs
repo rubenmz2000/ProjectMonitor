@@ -15,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IRepository<Project>, ProjectRepository>();
 builder.Services.AddScoped<IRepository<ProjectTask>, ProjectTaskRepository>();
+builder.Services.AddScoped<IRepository<Actor>, ActorRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowConnections", optionsBuilder =>

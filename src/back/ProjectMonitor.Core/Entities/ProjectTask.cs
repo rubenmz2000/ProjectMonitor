@@ -13,7 +13,11 @@ public class ProjectTask
     public Priority Priority { get; set; }
     public DateTime DueDate { get; set; }
     public Guid ProjectId { get; set; }
+    public Guid CreatedById { get; set; }
+    public Guid? AssigneeId { get; set; }
     public bool IsDeleted { get; set; }
 
     public Project Project { get; set; } = null!;
+    public Actor CreatedBy { get; set; } = null!;
+    public Actor? Assignee { get; set; }
 }
