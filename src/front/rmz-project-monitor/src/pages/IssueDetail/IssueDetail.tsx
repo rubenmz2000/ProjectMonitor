@@ -5,6 +5,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { getIssueByIdentifier, getActiveActors, updateAssignee } from '../../serivces/ApiService.ts';
 import type { IssueDetailData } from '../../models/IssueDetailModel.ts';
 import type { Actor } from '../../models/ActorModel.ts';
+import IssueActivityPanel from '../../components/IssueActivity/IssueActivityPanel.tsx';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -21,6 +22,7 @@ function IssueDetail() {
     const [error, setError] = useState<string | null>(null);
     const [actors, setActors] = useState<Actor[]>([]);
     const [updatingAssignee, setUpdatingAssignee] = useState<boolean>(false);
+    const [activityRefreshKey, setActivityRefreshKey] = useState(0);
 
     const fetchIssue = useCallback(async () => {
         if (!issueIdentifier) return;
@@ -50,6 +52,7 @@ function IssueDetail() {
         try {
             const updated = await updateAssignee(issueIdentifier, newAssigneeId);
             setIssue(updated);
+            setActivityRefreshKey((k) => k + 1);
         } catch {
             setError('Failed to update assignee');
         } finally {
@@ -203,6 +206,8 @@ function IssueDetail() {
                             </Box>
                         )}
                     </Card>
+
+                    <IssueActivityPanel issueIdentifier={issueIdentifier!} refreshKey={activityRefreshKey} />
                 </>
             )}
         </div>

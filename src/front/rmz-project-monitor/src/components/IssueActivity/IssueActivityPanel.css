@@ -1,0 +1,60 @@
+/* Colors come from the RMZ-UI variables in rmz-theme.css (MUI runs with its default palette). */
+
+.activity-card {
+    padding: 24px;
+    margin-top: 24px;
+}
+
+.activity-card .activity-title {
+    margin-bottom: 12px;
+}
+
+.activity-card .activity-muted {
+    color: var(--text-muted);
+}
+
+.activity-card .activity-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.activity-card .activity-entry {
+    border-left: 2px solid var(--border);
+    padding-left: 12px;
+}
+
+.activity-card .activity-actor {
+    font-weight: 600;
+}
+
+.activity-card .activity-time {
+    margin-left: 8px;
+    font-size: 0.85em;
+}
+
+.activity-card .activity-body {
+    white-space: pre-wrap;
+    margin-top: 4px;
+}
+
+.activity-card .activity-comment-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.activity-card .activity-comment-input .MuiInputBase-root {
+    color: var(--text);
+}
+
+.activity-card .activity-comment-input .MuiInputLabel-root {
+    color: var(--text-muted);
+}
+
+.activity-card .activity-comment-input .MuiOutlinedInput-root:not(.Mui-focused) .MuiOutlinedInput-notchedOutline {
+    border-color: var(--text-muted);
+}

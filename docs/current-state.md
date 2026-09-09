@@ -1,4 +1,4 @@
-# Current state (as of PM-0006)
+# Current state (as of PM-0007)
 
 What actually exists in the repository. Update this when an issue is merged; keep it a snapshot,
 not a changelog (the git history is the changelog).
@@ -13,13 +13,14 @@ not a changelog (the git history is the changelog).
 | PM-0004 | Detail view reached by human identifier (`/issues/PM-001`) |
 | PM-0005 | `Actor` model (Human/Agent), `CreatedBy` and `Assignee`, actor header, assignee change |
 | PM-0006 | Rename `ProjectTask` → `Issue` everywhere (code, database via rename migration, API, UI, docs); description length limit removed |
+| PM-0007 | `IssueActivity` append-only history (`Created`, `AssigneeChanged`, `Comment`), actor mandatory on all issue mutations, comments and activity endpoints, activity panel in the issue detail |
 
 PM-0001 to PM-0003 were numbered provisionally, before Project Monitor could manage its own
 workflow.
 
 ## Backend
 
-- Entities: `Project`, `Issue`, `Actor`. Enums stored as strings.
+- Entities: `Project`, `Issue`, `Actor`, `IssueActivity`. Enums stored as strings.
 - `Project`: name, description, `IssuePrefix` (max 5, unique among non-deleted projects, auto-suggested
   from the name), status (`NotStarted`, `InProgress`, `Paused`, `Completed`, `Archived`), soft delete.
 - `Issue`: `IssueNumber` (unique per project), title (50), description (no limit), status
@@ -30,8 +31,12 @@ workflow.
   - `GET/POST /api/projects`, `GET /api/projects/{id}`, `GET /api/projects/latest`,
     `GET /api/projects/status-count`, `PUT/DELETE /api/projects/{id}`
   - `GET/POST /api/projects/{projectId}/issues` (POST requires `X-Actor-Identifier`)
-  - `GET /api/issues/{PREFIX-NNN}`, `PATCH /api/issues/{PREFIX-NNN}/assign`
+  - `GET /api/issues/{PREFIX-NNN}`, `PATCH /api/issues/{PREFIX-NNN}/assign` (`{ assigneeId, note? }`, requires actor)
+  - `GET /api/issues/{PREFIX-NNN}/activity`, `POST /api/issues/{PREFIX-NNN}/comments` (requires actor)
   - `GET /api/actors` (active actors)
+- `IssueActivity`: actor, timestamp, type, old/new value (max 100), body (no limit); index on
+  `(IssueId, OccurredAt)`. `Created` was backfilled for existing issues.
+- The acting actor is resolved by `ICurrentActorResolver` from the `X-Actor-Identifier` header.
 - Migrations are applied automatically at startup. No tests, no CI.
 
 ## Frontend
@@ -45,7 +50,6 @@ workflow.
 ## Known gaps and rough edges
 
 - No way to change an issue's status or edit its fields after creation (backend or frontend).
-- Assignee changes are not attributed to an actor and nothing keeps history beyond `UpdatedAt`.
 - The actor header is trusted as-is; there is no authentication.
 - `IssueNumber` is computed as MAX+1 without a transaction (concurrent creation can fail on the
   unique index).
