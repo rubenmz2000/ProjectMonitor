@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
-import { Button, Typography, CircularProgress, Alert, Box, Card, Select, MenuItem, FormControl, InputLabel, Chip } from "@mui/material";
+import { Button, Typography, CircularProgress, Alert, Box, Card, Select, MenuItem, FormControl, Chip } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { getIssueByTaskIdentifier, getActiveActors, updateAssignee } from '../../serivces/ApiService.ts';
 import type { TaskDetailData, Actor } from '../../models/TaskDetailModel.ts';
@@ -109,12 +109,12 @@ function TaskDetail() {
 
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Status:</Typography>
-                            <Chip label={task.status} size="small" />
+                            <Chip label={task.status} size="small" sx={{ color: 'text.primary', borderColor: 'divider' }} variant="outlined" />
                         </Box>
 
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Priority:</Typography>
-                            <Chip label={task.priority} size="small" variant="outlined" />
+                            <Chip label={task.priority} size="small" sx={{ color: 'text.primary', borderColor: 'divider' }} variant="outlined" />
                         </Box>
 
                         <Box className="detail-field">
@@ -124,6 +124,7 @@ function TaskDetail() {
                                     label={task.createdBy.displayName} 
                                     size="small" 
                                     color={task.createdBy.kind === 'Agent' ? 'secondary' : 'primary'}
+                                    sx={{ color: 'text.primary' }}
                                     variant="outlined"
                                 />
                                 {task.createdBy.kind === 'Agent' && (
@@ -137,13 +138,12 @@ function TaskDetail() {
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Assignee:</Typography>
                             <FormControl size="small" sx={{ minWidth: 200 }}>
-                                <InputLabel id="assignee-label">Assignee</InputLabel>
                                 <Select
-                                    labelId="assignee-label"
                                     value={task.assignee?.id || ''}
-                                    label="Assignee"
                                     onChange={(e) => handleAssigneeChange(e.target.value)}
                                     disabled={updatingAssignee}
+                                    displayEmpty
+                                    sx={{ color: 'text.primary' }}
                                 >
                                     <MenuItem value="">
                                         <em>Unassigned</em>
