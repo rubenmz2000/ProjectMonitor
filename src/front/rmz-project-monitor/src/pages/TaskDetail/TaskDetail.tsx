@@ -109,41 +109,32 @@ function TaskDetail() {
 
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Status:</Typography>
-                            <Chip 
-                                label={task.status} 
-                                size="small" 
-                                variant="outlined" 
-                                sx={(theme) => ({ 
-                                    color: theme.palette.text.primary,
-                                    borderColor: theme.palette.divider 
-                                })} 
+                            <Chip
+                                label={task.status}
+                                size="small"
+                                variant="outlined"
+                                sx={{ color: 'inherit' }}
                             />
                         </Box>
 
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Priority:</Typography>
-                            <Chip 
-                                label={task.priority} 
-                                size="small" 
-                                variant="outlined" 
-                                sx={(theme) => ({ 
-                                    color: theme.palette.text.primary,
-                                    borderColor: theme.palette.divider 
-                                })} 
+                            <Chip
+                                label={task.priority}
+                                size="small"
+                                variant="outlined"
+                                sx={{ color: 'inherit' }}
                             />
                         </Box>
 
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Created by:</Typography>
                             <Box component="span" className="actor-display">
-                                <Chip 
-                                    label={task.createdBy.displayName} 
-                                    size="small" 
+                                <Chip
+                                    label={task.createdBy.displayName}
+                                    size="small"
                                     variant="outlined"
-                                    sx={(theme) => ({ 
-                                        color: theme.palette.text.primary,
-                                        borderColor: theme.palette.divider 
-                                    })} 
+                                    sx={{ color: 'inherit' }}
                                 />
                                 {task.createdBy.kind === 'Agent' && (
                                     <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
@@ -161,21 +152,17 @@ function TaskDetail() {
                                     onChange={(e) => handleAssigneeChange(e.target.value)}
                                     disabled={updatingAssignee}
                                     displayEmpty
-                                    sx={(theme) => ({
-                                        color: theme.palette.text.primary,
-                                        '.MuiSelect-icon': {
-                                            color: theme.palette.text.primary
-                                        },
-                                        '.MuiOutlinedInput-notchedOutline': {
-                                            borderColor: theme.palette.divider
-                                        }
-                                    })}
+                                    sx={{
+                                        color: 'inherit',
+                                        '.MuiSelect-icon': { color: 'inherit' },
+                                        '.MuiOutlinedInput-notchedOutline': { borderColor: 'divider' }
+                                    }}
                                 >
-                                    <MenuItem value="" sx={(theme) => ({ color: theme.palette.text.secondary })}>
+                                    <MenuItem value="" sx={{ color: 'inherit' }}>
                                         <em>Unassigned</em>
                                     </MenuItem>
                                     {actors.map((actor) => (
-                                        <MenuItem key={actor.id} value={actor.id} sx={(theme) => ({ color: theme.palette.text.primary })}>
+                                        <MenuItem key={actor.id} value={actor.id} sx={{ color: 'inherit' }}>
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                                 {actor.displayName}
                                                 {actor.kind === 'Agent' && (
