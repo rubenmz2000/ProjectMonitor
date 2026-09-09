@@ -1,4 +1,4 @@
-import type { Actor } from './IssueDetailModel.ts';
+import type { Actor } from './ActorModel.ts';
 
 export interface Issue {
     id: string;

@@ -2,7 +2,8 @@ import axios from 'axios';
 import type {Project} from '../models/ProjectModel.ts';
 import type {StatusCount} from '../models/StatusCount.ts';
 import type {Issue} from '../models/IssueModel.ts';
-import type { IssueDetailData, Actor } from '../models/IssueDetailModel.ts';
+import type { IssueDetailData } from '../models/IssueDetailModel.ts';
+import type { Actor } from '../models/ActorModel.ts';
 
 const API_URL = 'http://localhost:5023/api';
 

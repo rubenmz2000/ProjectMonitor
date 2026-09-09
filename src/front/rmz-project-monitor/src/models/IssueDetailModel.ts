@@ -1,9 +1,4 @@
-export interface Actor {
-  id: string;
-  displayName: string;
-  identifier: string;
-  kind: string;
-}
+import type { Actor } from './ActorModel.ts';
 
 export interface IssueDetailData {
   id: string;
