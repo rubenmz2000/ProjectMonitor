@@ -1,29 +1,29 @@
-.task-detail-container {
+.issue-detail-container {
     padding: 20px;
 }
 
-.task-detail-container .back-button {
+.issue-detail-container .back-button {
     margin-bottom: 16px;
 }
 
-.task-detail-container .detail-header {
+.issue-detail-container .detail-header {
     margin-bottom: 24px;
 }
 
-.task-detail-container .detail-card {
+.issue-detail-container .detail-card {
     padding: 24px;
 }
 
-.task-detail-container .detail-field {
+.issue-detail-container .detail-field {
     margin-bottom: 16px;
 }
 
-.task-detail-container .detail-field-label {
+.issue-detail-container .detail-field-label {
     font-weight: 600;
     margin-right: 8px;
 }
 
-.task-detail-container .description-text {
+.issue-detail-container .description-text {
     white-space: pre-wrap;
     margin-top: 8px;
 }
@@ -32,30 +32,30 @@
    that relies on palette colors goes near-black on the RMZ-UI dark background.
    Colors below come from the RMZ-UI variables in rmz-theme.css. */
 
-.task-detail-container .detail-subtitle,
-.task-detail-container .actor-kind,
+.issue-detail-container .detail-subtitle,
+.issue-detail-container .actor-kind,
 .assignee-menu .actor-kind {
     color: var(--text-muted);
 }
 
-.task-detail-container .detail-chip {
+.issue-detail-container .detail-chip {
     color: var(--text);
     border-color: var(--text-muted);
 }
 
-.task-detail-container .assignee-select {
+.issue-detail-container .assignee-select {
     color: var(--text);
 }
 
-.task-detail-container .assignee-select .MuiSelect-icon {
+.issue-detail-container .assignee-select .MuiSelect-icon {
     color: var(--text-muted);
 }
 
-.task-detail-container .assignee-select:not(.Mui-focused) .MuiOutlinedInput-notchedOutline {
+.issue-detail-container .assignee-select:not(.Mui-focused) .MuiOutlinedInput-notchedOutline {
     border-color: var(--text-muted);
 }
 
-/* The dropdown is rendered in a portal, outside .task-detail-container */
+/* The dropdown is rendered in a portal, outside .issue-detail-container */
 .MuiPaper-root.assignee-menu {
     background-color: var(--bg-surface);
     color: var(--text);

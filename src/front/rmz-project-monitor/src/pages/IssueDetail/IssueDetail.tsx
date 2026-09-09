@@ -2,53 +2,54 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { Button, Typography, CircularProgress, Alert, Box, Card, Select, MenuItem, FormControl, Chip } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { getIssueByTaskIdentifier, getActiveActors, updateAssignee } from '../../serivces/ApiService.ts';
-import type { TaskDetailData, Actor } from '../../models/TaskDetailModel.ts';
+import { getIssueByIdentifier, getActiveActors, updateAssignee } from '../../serivces/ApiService.ts';
+import type { IssueDetailData } from '../../models/IssueDetailModel.ts';
+import type { Actor } from '../../models/ActorModel.ts';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import './TaskDetail.css';
+import './IssueDetail.css';
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
 
-function TaskDetail() {
-    const { taskIdentifier } = useParams<{ taskIdentifier: string }>();
+function IssueDetail() {
+    const { issueIdentifier } = useParams<{ issueIdentifier: string }>();
     const navigate = useNavigate();
-    const [task, setTask] = useState<TaskDetailData | null>(null);
+    const [issue, setIssue] = useState<IssueDetailData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [actors, setActors] = useState<Actor[]>([]);
     const [updatingAssignee, setUpdatingAssignee] = useState<boolean>(false);
 
-    const fetchTask = useCallback(async () => {
-        if (!taskIdentifier) return;
+    const fetchIssue = useCallback(async () => {
+        if (!issueIdentifier) return;
         setLoading(true);
         setError(null);
         try {
-            const data = await getIssueByTaskIdentifier(taskIdentifier);
-            setTask(data);
+            const data = await getIssueByIdentifier(issueIdentifier);
+            setIssue(data);
         } catch {
-            setError('Failed to load task');
-            setTask(null);
+            setError('Failed to load issue');
+            setIssue(null);
         } finally {
             setLoading(false);
         }
-    }, [taskIdentifier]);
+    }, [issueIdentifier]);
 
     useEffect(() => {
-        fetchTask();
+        fetchIssue();
         getActiveActors().then(setActors).catch(() => setActors([]));
-    }, [fetchTask]);
+    }, [fetchIssue]);
 
     const handleAssigneeChange = async (actorId: string) => {
-        if (!task || !taskIdentifier) return;
+        if (!issue || !issueIdentifier) return;
         
         const newAssigneeId = actorId === '' ? null : actorId;
         setUpdatingAssignee(true);
         try {
-            const updated = await updateAssignee(taskIdentifier, newAssigneeId);
-            setTask(updated);
+            const updated = await updateAssignee(issueIdentifier, newAssigneeId);
+            setIssue(updated);
         } catch {
             setError('Failed to update assignee');
         } finally {
@@ -57,7 +58,7 @@ function TaskDetail() {
     };
 
     return (
-        <div className="task-detail-container">
+        <div className="issue-detail-container">
             <Button
                 className="back-button"
                 startIcon={<ArrowBackIcon />}
@@ -73,36 +74,36 @@ function TaskDetail() {
             ) : error ? (
                 <Alert severity="error" sx={{ width: '100%' }}>
                     {error}
-                    <Button onClick={fetchTask} sx={{ ml: 2 }} size="small" variant="outlined">
+                    <Button onClick={fetchIssue} sx={{ ml: 2 }} size="small" variant="outlined">
                         Retry
                     </Button>
                 </Alert>
-            ) : !task ? (
+            ) : !issue ? (
                 <Typography variant="body1" sx={{ py: 4, textAlign: 'center' }}>
-                    Task not found.
+                    Issue not found.
                 </Typography>
             ) : (
                 <>
                     <Box className="detail-header">
                         <Typography variant="h4">
-                            {task.taskIdentifier}
+                            {issue.issueIdentifier}
                         </Typography>
                         <Typography variant="subtitle1" className="detail-subtitle">
-                            {task.projectName} ({task.taskPrefix})
+                            {issue.projectName} ({issue.issuePrefix})
                         </Typography>
                     </Box>
 
                     <Card className="detail-card">
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Title:</Typography>
-                            <Typography component="span">{task.title}</Typography>
+                            <Typography component="span">{issue.title}</Typography>
                         </Box>
 
-                        {task.description && (
+                        {issue.description && (
                             <Box className="detail-field">
                                 <Typography className="detail-field-label" component="span">Description:</Typography>
                                 <Typography className="description-text" variant="body2">
-                                    {task.description}
+                                    {issue.description}
                                 </Typography>
                             </Box>
                         )}
@@ -110,7 +111,7 @@ function TaskDetail() {
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Status:</Typography>
                             <Chip
-                                label={task.status}
+                                label={issue.status}
                                 size="small"
                                 variant="outlined"
                                 className="detail-chip"
@@ -120,7 +121,7 @@ function TaskDetail() {
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Priority:</Typography>
                             <Chip
-                                label={task.priority}
+                                label={issue.priority}
                                 size="small"
                                 variant="outlined"
                                 className="detail-chip"
@@ -131,12 +132,12 @@ function TaskDetail() {
                             <Typography className="detail-field-label" component="span">Created by:</Typography>
                             <Box component="span" className="actor-display">
                                 <Chip
-                                    label={task.createdBy.displayName}
+                                    label={issue.createdBy.displayName}
                                     size="small"
                                     variant="outlined"
                                     className="detail-chip"
                                 />
-                                {task.createdBy.kind === 'Agent' && (
+                                {issue.createdBy.kind === 'Agent' && (
                                     <Typography variant="caption" className="actor-kind" sx={{ ml: 1 }}>
                                         (Agent)
                                     </Typography>
@@ -148,7 +149,7 @@ function TaskDetail() {
                             <Typography className="detail-field-label" component="span">Assignee:</Typography>
                             <FormControl size="small" sx={{ minWidth: 200 }}>
                                 <Select
-                                    value={task.assignee?.id || ''}
+                                    value={issue.assignee?.id || ''}
                                     onChange={(e) => handleAssigneeChange(e.target.value)}
                                     disabled={updatingAssignee}
                                     displayEmpty
@@ -177,11 +178,11 @@ function TaskDetail() {
                             )}
                         </Box>
 
-                        {task.dueDate && (
+                        {issue.dueDate && (
                             <Box className="detail-field">
                                 <Typography className="detail-field-label" component="span">Due Date:</Typography>
                                 <Typography component="span">
-                                    {dayjs.utc(task.dueDate).format('DD/MM/YYYY')}
+                                    {dayjs.utc(issue.dueDate).format('DD/MM/YYYY')}
                                 </Typography>
                             </Box>
                         )}
@@ -189,15 +190,15 @@ function TaskDetail() {
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Created:</Typography>
                             <Typography component="span">
-                                {dayjs.utc(task.creationDate).local().fromNow()}
+                                {dayjs.utc(issue.creationDate).local().fromNow()}
                             </Typography>
                         </Box>
 
-                        {task.updatedAt && (
+                        {issue.updatedAt && (
                             <Box className="detail-field">
                                 <Typography className="detail-field-label" component="span">Updated:</Typography>
                                 <Typography component="span">
-                                    {dayjs.utc(task.updatedAt).local().fromNow()}
+                                    {dayjs.utc(issue.updatedAt).local().fromNow()}
                                 </Typography>
                             </Box>
                         )}
@@ -208,4 +209,4 @@ function TaskDetail() {
     );
 }
 
-export default TaskDetail;
+export default IssueDetail;

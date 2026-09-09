@@ -11,7 +11,7 @@ import './CreateProjectDialog.css';
 import '../../../rmz-ui/rmz-theme.css';
 import {addProject} from '../../../serivces/ApiService.ts'
 
-function generateTaskPrefix(projectName: string): string {
+function generateIssuePrefix(projectName: string): string {
     if (!projectName.trim()) return '';
     
     const words = projectName.trim().split(/\s+/).filter(w => w.length > 0);
@@ -28,15 +28,15 @@ function generateTaskPrefix(projectName: string): string {
 
 export default function CreateProjectDialog({open, onClose}: {open: boolean, onClose: (result: string) => void}) {
     const [projectName, setProjectName] = useState('');
-    const [taskPrefix, setTaskPrefix] = useState('');
+    const [issuePrefix, setIssuePrefix] = useState('');
     const [suggestedPrefix, setSuggestedPrefix] = useState('');
     
     useEffect(() => {
-        const suggested = generateTaskPrefix(projectName);
+        const suggested = generateIssuePrefix(projectName);
         setSuggestedPrefix(suggested);
         // Auto-fill if user hasn't manually edited the prefix
-        if (!taskPrefix || taskPrefix === suggestedPrefix) {
-            setTaskPrefix(suggested);
+        if (!issuePrefix || issuePrefix === suggestedPrefix) {
+            setIssuePrefix(suggested);
         }
     }, [projectName]);
     
@@ -50,7 +50,7 @@ export default function CreateProjectDialog({open, onClose}: {open: boolean, onC
             onClose("submit");
             // Reset form
             setProjectName('');
-            setTaskPrefix('');
+            setIssuePrefix('');
             setSuggestedPrefix('');
         } catch (e) {
             onClose("error");
@@ -61,7 +61,7 @@ export default function CreateProjectDialog({open, onClose}: {open: boolean, onC
         onClose('cancel');
         // Reset form
         setProjectName('');
-        setTaskPrefix('');
+        setIssuePrefix('');
         setSuggestedPrefix('');
     }
     
@@ -107,11 +107,11 @@ export default function CreateProjectDialog({open, onClose}: {open: boolean, onC
                         label={"Project description"} 
                     />
                     <TextField 
-                        name={"taskPrefix"} 
-                        value={taskPrefix}
-                        onChange={(e) => setTaskPrefix(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5))}
+                        name={"issuePrefix"} 
+                        value={issuePrefix}
+                        onChange={(e) => setIssuePrefix(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5))}
                         sx={{ borderColor: 'var(--text-muted)'}} 
-                        label={"Task Prefix"} 
+                        label={"Issue Prefix"} 
                         helperText={suggestedPrefix ? `Suggested: ${suggestedPrefix}` : "Auto-generated from name if empty. Max 5 alphanumeric chars."}
                         slotProps={{ htmlInput: { maxLength: 5, pattern: '[A-Za-z0-9]*' } }}
                     />

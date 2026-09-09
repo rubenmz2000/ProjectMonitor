@@ -1,6 +1,6 @@
 namespace ProjectMonitor.Core.Enums;
 
-public enum ProjectTaskStatus
+public enum IssueStatus
 {
     ToDo,
     InProgress,

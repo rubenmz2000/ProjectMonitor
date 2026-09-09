@@ -5,7 +5,7 @@ its own development; work items are numbered `PM-000X` by hand and tracked in co
 git history.
 
 ```
-develop → Issue/Task → branch (or worktree) → implementation → PR → human review → squash merge → cleanup
+develop → Issue → branch (or worktree) → implementation → PR → human review → squash merge → cleanup
 ```
 
 - `develop` is the base branch. Nothing is committed directly on it.

@@ -1,13 +1,13 @@
 using ProjectMonitor.Core.Enums;
 namespace ProjectMonitor.Core.Entities;
 
-public class ProjectTask
+public class Issue
 {
     public Guid Id { get; set; }
-    public int TaskNumber { get; set; }
+    public int IssueNumber { get; set; }
     public required string Title { get; set; }
     public required string Description { get; set; }
-    public ProjectTaskStatus Status { get; set; }
+    public IssueStatus Status { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime UpdatedAt { get; set; }
     public Priority Priority { get; set; }

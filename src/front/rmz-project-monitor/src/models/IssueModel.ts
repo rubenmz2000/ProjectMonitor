@@ -1,8 +1,8 @@
-import type { Actor } from './TaskDetailModel.ts';
+import type { Actor } from './ActorModel.ts';
 
-export interface ProjectTask {
+export interface Issue {
     id: string;
-    taskIdentifier: string;
+    issueIdentifier: string;
     title: string;
     description: string;
     status: string;

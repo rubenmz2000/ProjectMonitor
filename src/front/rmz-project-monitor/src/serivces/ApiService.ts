@@ -1,8 +1,9 @@
 import axios from 'axios';
 import type {Project} from '../models/ProjectModel.ts';
 import type {StatusCount} from '../models/StatusCount.ts';
-import type {ProjectTask} from '../models/ProjectTaskModel.ts';
-import type { TaskDetailData, Actor } from '../models/TaskDetailModel.ts';
+import type {Issue} from '../models/IssueModel.ts';
+import type { IssueDetailData } from '../models/IssueDetailModel.ts';
+import type { Actor } from '../models/ActorModel.ts';
 
 const API_URL = 'http://localhost:5023/api';
 
@@ -55,14 +56,14 @@ export const addProject = async (project: Record<string, FormDataEntryValue>): P
     }
 }
 
-export const getProjectTasks = async (projectId: string): Promise<ProjectTask[]> => {
-    const response = await apiClient.get(`/projects/${projectId}/tasks`);
+export const getProjectIssues = async (projectId: string): Promise<Issue[]> => {
+    const response = await apiClient.get(`/projects/${projectId}/issues`);
     return response.data;
 }
 
-export const createTask = async (projectId: string, task: Record<string, unknown>): Promise<ProjectTask> => {
+export const createIssue = async (projectId: string, issue: Record<string, unknown>): Promise<Issue> => {
     try {
-        const response = await apiClient.post(`/projects/${projectId}/tasks`, task);
+        const response = await apiClient.post(`/projects/${projectId}/issues`, issue);
         return response.data;
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Server error";
@@ -70,8 +71,8 @@ export const createTask = async (projectId: string, task: Record<string, unknown
     }
 }
 
-export const getIssueByTaskIdentifier = async (taskIdentifier: string): Promise<TaskDetailData> => {
-    const response = await apiClient.get(`/issues/${taskIdentifier}`);
+export const getIssueByIdentifier = async (issueIdentifier: string): Promise<IssueDetailData> => {
+    const response = await apiClient.get(`/issues/${issueIdentifier}`);
     return response.data;
 }
 
@@ -80,7 +81,7 @@ export const getActiveActors = async (): Promise<Actor[]> => {
     return response.data;
 }
 
-export const updateAssignee = async (taskIdentifier: string, assigneeId: string | null): Promise<TaskDetailData> => {
-    const response = await apiClient.patch(`/issues/${taskIdentifier}/assign`, { assigneeId });
+export const updateAssignee = async (issueIdentifier: string, assigneeId: string | null): Promise<IssueDetailData> => {
+    const response = await apiClient.patch(`/issues/${issueIdentifier}/assign`, { assigneeId });
     return response.data;
 }
