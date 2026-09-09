@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectMonitor.API.Extensions;
 using ProjectMonitor.Core;
 using ProjectMonitor.Core.Entities;
 using ProjectMonitor.DataAccess.Data;
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IRepository<Project>, ProjectRepository>();
 builder.Services.AddScoped<IRepository<Issue>, IssueRepository>();
 builder.Services.AddScoped<IRepository<Actor>, ActorRepository>();
+builder.Services.AddScoped<IRepository<IssueActivity>, IssueActivityRepository>();
+builder.Services.AddCurrentActor();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowConnections", optionsBuilder =>

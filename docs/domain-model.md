@@ -45,8 +45,9 @@ Decided and implemented (PM-0005):
 - Rubén (`ruben`, Human) and Iris (`iris`, Agent) are seeded by migration.
 - Issues have a required `CreatedBy` and an optional `Assignee`, both actors.
 - The acting actor is identified by an `X-Actor-Identifier` HTTP header. This is a transitory
-  mechanism, explicitly meant to be replaced by real authentication. Today only issue creation
-  reads it; assignment changes are not attributed to anyone.
+  mechanism, explicitly meant to be replaced by real authentication. Since PM-0007 it is
+  mandatory on every issue mutation (create, assign, comment) and every change is attributed to
+  the resolved actor.
 
 Open:
 
@@ -74,16 +75,42 @@ Open:
 - The exact shape of the result a session returns.
 - How Project Monitor provides context to a new session.
 
-## Handoffs, history and related concepts
+## Issue activity (history)
+
+Concept: an append-only record of what happened to an issue — who did it, when, and what. The
+issue keeps its current state; activities explain how it got there and are the persistent base
+on which handoffs, sessions and other history will be built.
+
+Decided and implemented (PM-0007):
+
+- `IssueActivity { Id, IssueId, ActorId, OccurredAt, Type, OldValue?, NewValue?, Body? }`.
+  Never updated or deleted.
+- Structured: type, actor, timestamp, old/new value. Text: `Body` (a comment, or an optional note
+  attached to a change). Text is never parsed.
+- Types today: `Created` (also backfilled for pre-existing issues), `AssigneeChanged`
+  (old/new value = actor id or null for unassigned) and `Comment`. A reassignment to the same
+  assignee records nothing; a comment is the way to leave text without a change.
+- New activity types are added only when a producer exists (e.g. a status change endpoint).
+- Read through `GET /api/issues/{id}/activity`, in chronological order, with values resolved to
+  labels by the API.
+
+Open:
+
+- How a `Session` relates to issues and activities is not designed. It might reference
+  activities, own them, or be a separate model; nothing is assumed yet.
+- Whether structured metadata (JSON) or links to external artifacts (commits, PRs) belong on the
+  activity or elsewhere.
+
+## Handoffs and related concepts
 
 Decided (direction): responsibility passes explicitly between Iris and Rubén, and those handoffs
-are represented in Project Monitor rather than remembered from a conversation. The history of an
-issue should eventually be reconstructible.
+are represented in Project Monitor rather than remembered from a conversation. Today a handoff
+can be expressed as a reassignment with a note; that is a stepping stone, not the model.
 
 Open:
 
 - How handoffs are represented (operation, activity entry, state, combination...).
-- Whether `Decision`, `Approval`, `Activity`, `Artifact` and similar need their own models.
+- Whether `Decision`, `Approval`, `Artifact` and similar need their own models.
 - Integration architecture with Iris and with GitHub (commits, PRs, builds, deployments).
 - Definitive navigation and screens.
 
@@ -92,9 +119,10 @@ Open:
 | Area | Decided | Implemented | Open |
 | --- | --- | --- | --- |
 | Issue identity (GUID + `PREFIX-NNN`) | yes | yes | — |
-| Reporter / assignee as actors | yes | yes | attribution of changes |
+| Reporter / assignee as actors | yes | yes | — |
 | State ≠ assignment | yes | data model only | states, transitions, endpoint |
 | `Issue` naming | yes | yes | — |
 | Actor identity | transitory header | partial | real authentication |
-| Session | direction | no | model, start, result |
-| Handoffs / history | direction | no | representation, models |
+| Issue activity | yes | yes (Created, AssigneeChanged, Comment) | metadata, external links |
+| Session | direction | no | model, start, result, relation to activity |
+| Handoffs | direction | reassignment + note only | representation, models |

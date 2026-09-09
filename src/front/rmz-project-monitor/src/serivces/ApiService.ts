@@ -4,6 +4,7 @@ import type {StatusCount} from '../models/StatusCount.ts';
 import type {Issue} from '../models/IssueModel.ts';
 import type { IssueDetailData } from '../models/IssueDetailModel.ts';
 import type { Actor } from '../models/ActorModel.ts';
+import type { IssueActivity } from '../models/IssueActivityModel.ts';
 
 const API_URL = 'http://localhost:5023/api';
 
@@ -81,7 +82,17 @@ export const getActiveActors = async (): Promise<Actor[]> => {
     return response.data;
 }
 
-export const updateAssignee = async (issueIdentifier: string, assigneeId: string | null): Promise<IssueDetailData> => {
-    const response = await apiClient.patch(`/issues/${issueIdentifier}/assign`, { assigneeId });
+export const updateAssignee = async (issueIdentifier: string, assigneeId: string | null, note?: string): Promise<IssueDetailData> => {
+    const response = await apiClient.patch(`/issues/${issueIdentifier}/assign`, { assigneeId, note: note ?? null });
+    return response.data;
+}
+
+export const getIssueActivity = async (issueIdentifier: string): Promise<IssueActivity[]> => {
+    const response = await apiClient.get(`/issues/${issueIdentifier}/activity`);
+    return response.data;
+}
+
+export const addComment = async (issueIdentifier: string, body: string): Promise<IssueActivity> => {
+    const response = await apiClient.post(`/issues/${issueIdentifier}/comments`, { body });
     return response.data;
 }

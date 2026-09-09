@@ -73,7 +73,9 @@ for real authentication.
 Projects can be created and listed; each project has an issue prefix. Issues can be created and
 listed per project, have a stable GUID plus a human identifier like `PM-001`, a status, a priority,
 a creator and an optional assignee. Actors can be humans or agents (Rubén and Iris are seeded). An
-issue detail view allows changing the assignee. There is no endpoint yet to change an issue's
-status or edit it, no session/handoff/activity model, and the UI is provisional.
+issue detail view allows changing the assignee, commenting, and shows the issue's activity
+(append-only history of creation, reassignments and comments, attributed to an actor). There is
+no endpoint yet to change an issue's status or edit it, no session/handoff model, and the UI is
+provisional.
 
 Details and history: [`docs/current-state.md`](docs/current-state.md).

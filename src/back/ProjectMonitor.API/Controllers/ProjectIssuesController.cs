@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProjectMonitor.API.Services;
 using ProjectMonitor.Core;
 using ProjectMonitor.Core.DTOs;
 using ProjectMonitor.Core.Entities;
@@ -9,7 +10,11 @@ namespace ProjectMonitor.API.Controllers;
 
 [Route("api/projects/{projectId:guid}/issues")]
 [ApiController]
-public class ProjectIssuesController(IRepository<Project> projectRepository, IRepository<Issue> issueRepository, IRepository<Actor> actorRepository) : ControllerBase
+public class ProjectIssuesController(
+    IRepository<Project> projectRepository,
+    IRepository<Issue> issueRepository,
+    IRepository<IssueActivity> activityRepository,
+    ICurrentActorResolver currentActor) : ControllerBase
 {
     [HttpGet]
     public IActionResult GetIssues(Guid projectId)
@@ -59,13 +64,9 @@ public class ProjectIssuesController(IRepository<Project> projectRepository, IRe
         var project = projectRepository.GetById(projectId);
         if (project == null) return NotFound("Project not found");
 
-        // Resolve actor from header
-        var actorIdentifier = Request.Headers["X-Actor-Identifier"].FirstOrDefault();
-        if (string.IsNullOrWhiteSpace(actorIdentifier))
-            return BadRequest("Missing X-Actor-Identifier header");
-
-        var actor = actorRepository.GetAll(a => a.Identifier == actorIdentifier && a.IsActive).FirstOrDefault();
-        if (actor == null) return NotFound("Actor not found");
+        var actor = currentActor.Resolve();
+        if (actor == null)
+            return BadRequest($"Missing or unknown {CurrentActorResolver.HeaderName} header");
 
         // Generate IssueNumber using MAX+1 strategy
         var allIssuesForProject = issueRepository.GetAll(i => i.ProjectId == projectId).ToList();
@@ -95,6 +96,14 @@ public class ProjectIssuesController(IRepository<Project> projectRepository, IRe
         };
 
         issueRepository.Add(issue);
+        activityRepository.Add(new IssueActivity
+        {
+            Id = Guid.NewGuid(),
+            IssueId = issue.Id,
+            ActorId = actor.Id,
+            OccurredAt = now,
+            Type = IssueActivityType.Created
+        });
         try
         {
             var result = issueRepository.SaveChanges();
