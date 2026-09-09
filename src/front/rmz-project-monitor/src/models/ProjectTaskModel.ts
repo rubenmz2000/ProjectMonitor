@@ -1,3 +1,5 @@
+import type { Actor } from './TaskDetailModel.ts';
+
 export interface ProjectTask {
     id: string;
     taskIdentifier: string;
@@ -8,4 +10,6 @@ export interface ProjectTask {
     dueDate: string | null;
     creationDate: string;
     updatedAt: string;
+    createdBy: Actor;
+    assignee: Actor | null;
 }

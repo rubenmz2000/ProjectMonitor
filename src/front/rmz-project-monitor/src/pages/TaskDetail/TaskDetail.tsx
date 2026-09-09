@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
-import { Button, Typography, CircularProgress, Alert, Box, Card } from "@mui/material";
+import { Button, Typography, CircularProgress, Alert, Box, Card, Select, MenuItem, FormControl, InputLabel, Chip } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { getIssueByTaskIdentifier } from '../../serivces/ApiService.ts';
-import type { TaskDetailData } from '../../models/TaskDetailModel.ts';
+import { getIssueByTaskIdentifier, getActiveActors, updateAssignee } from '../../serivces/ApiService.ts';
+import type { TaskDetailData, Actor } from '../../models/TaskDetailModel.ts';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -18,6 +18,8 @@ function TaskDetail() {
     const [task, setTask] = useState<TaskDetailData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [actors, setActors] = useState<Actor[]>([]);
+    const [updatingAssignee, setUpdatingAssignee] = useState<boolean>(false);
 
     const fetchTask = useCallback(async () => {
         if (!taskIdentifier) return;
@@ -36,7 +38,23 @@ function TaskDetail() {
 
     useEffect(() => {
         fetchTask();
+        getActiveActors().then(setActors).catch(() => setActors([]));
     }, [fetchTask]);
+
+    const handleAssigneeChange = async (actorId: string) => {
+        if (!task || !taskIdentifier) return;
+        
+        const newAssigneeId = actorId === '' ? null : actorId;
+        setUpdatingAssignee(true);
+        try {
+            const updated = await updateAssignee(taskIdentifier, newAssigneeId);
+            setTask(updated);
+        } catch {
+            setError('Failed to update assignee');
+        } finally {
+            setUpdatingAssignee(false);
+        }
+    };
 
     return (
         <div className="task-detail-container">
@@ -91,12 +109,62 @@ function TaskDetail() {
 
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Status:</Typography>
-                            <Typography component="span">{task.status}</Typography>
+                            <Chip label={task.status} size="small" />
                         </Box>
 
                         <Box className="detail-field">
                             <Typography className="detail-field-label" component="span">Priority:</Typography>
-                            <Typography component="span">{task.priority}</Typography>
+                            <Chip label={task.priority} size="small" variant="outlined" />
+                        </Box>
+
+                        <Box className="detail-field">
+                            <Typography className="detail-field-label" component="span">Created by:</Typography>
+                            <Box component="span" className="actor-display">
+                                <Chip 
+                                    label={task.createdBy.displayName} 
+                                    size="small" 
+                                    color={task.createdBy.kind === 'Agent' ? 'secondary' : 'primary'}
+                                    variant="outlined"
+                                />
+                                {task.createdBy.kind === 'Agent' && (
+                                    <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+                                        (Agent)
+                                    </Typography>
+                                )}
+                            </Box>
+                        </Box>
+
+                        <Box className="detail-field">
+                            <Typography className="detail-field-label" component="span">Assignee:</Typography>
+                            <FormControl size="small" sx={{ minWidth: 200 }}>
+                                <InputLabel id="assignee-label">Assignee</InputLabel>
+                                <Select
+                                    labelId="assignee-label"
+                                    value={task.assignee?.id || ''}
+                                    label="Assignee"
+                                    onChange={(e) => handleAssigneeChange(e.target.value)}
+                                    disabled={updatingAssignee}
+                                >
+                                    <MenuItem value="">
+                                        <em>Unassigned</em>
+                                    </MenuItem>
+                                    {actors.map((actor) => (
+                                        <MenuItem key={actor.id} value={actor.id}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                {actor.displayName}
+                                                {actor.kind === 'Agent' && (
+                                                    <Typography variant="caption" color="text.secondary">
+                                                        (Agent)
+                                                    </Typography>
+                                                )}
+                                            </Box>
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            {updatingAssignee && (
+                                <CircularProgress size={20} sx={{ ml: 2 }} />
+                            )}
                         </Box>
 
                         {task.dueDate && (

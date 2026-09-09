@@ -15,6 +15,8 @@ public class ProjectTaskConfiguration : IEntityTypeConfiguration<ProjectTask>
         builder.Property(t => t.Status).HasConversion<string>();
         builder.Property(t => t.Priority).HasConversion<string>();
         builder.HasOne(t => t.Project).WithMany(p => p.Tasks).HasForeignKey(t => t.ProjectId);
+        builder.HasOne(t => t.CreatedBy).WithMany().HasForeignKey(t => t.CreatedById).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(t => t.Assignee).WithMany().HasForeignKey(t => t.AssigneeId).OnDelete(DeleteBehavior.Restrict);
         
         // Unique index: (ProjectId, TaskNumber) - ensures task numbers are unique within a project
         builder.HasIndex(t => new { t.ProjectId, t.TaskNumber })

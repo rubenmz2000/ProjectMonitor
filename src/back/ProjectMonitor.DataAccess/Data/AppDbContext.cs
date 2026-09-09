@@ -7,6 +7,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectTask> Tasks { get; set; }
+    public DbSet<Actor> Actors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
