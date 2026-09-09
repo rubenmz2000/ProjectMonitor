@@ -87,7 +87,7 @@ function TaskDetail() {
                         <Typography variant="h4">
                             {task.taskIdentifier}
                         </Typography>
-                        <Typography variant="subtitle1" color="text.secondary">
+                        <Typography variant="subtitle1" className="detail-subtitle">
                             {task.projectName} ({task.taskPrefix})
                         </Typography>
                     </Box>
@@ -113,7 +113,7 @@ function TaskDetail() {
                                 label={task.status}
                                 size="small"
                                 variant="outlined"
-                                sx={{ color: 'inherit' }}
+                                className="detail-chip"
                             />
                         </Box>
 
@@ -123,7 +123,7 @@ function TaskDetail() {
                                 label={task.priority}
                                 size="small"
                                 variant="outlined"
-                                sx={{ color: 'inherit' }}
+                                className="detail-chip"
                             />
                         </Box>
 
@@ -134,10 +134,10 @@ function TaskDetail() {
                                     label={task.createdBy.displayName}
                                     size="small"
                                     variant="outlined"
-                                    sx={{ color: 'inherit' }}
+                                    className="detail-chip"
                                 />
                                 {task.createdBy.kind === 'Agent' && (
-                                    <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+                                    <Typography variant="caption" className="actor-kind" sx={{ ml: 1 }}>
                                         (Agent)
                                     </Typography>
                                 )}
@@ -152,21 +152,18 @@ function TaskDetail() {
                                     onChange={(e) => handleAssigneeChange(e.target.value)}
                                     disabled={updatingAssignee}
                                     displayEmpty
-                                    sx={{
-                                        color: 'inherit',
-                                        '.MuiSelect-icon': { color: 'inherit' },
-                                        '.MuiOutlinedInput-notchedOutline': { borderColor: 'divider' }
-                                    }}
+                                    className="assignee-select"
+                                    MenuProps={{ slotProps: { paper: { className: 'assignee-menu' } } }}
                                 >
-                                    <MenuItem value="" sx={{ color: 'inherit' }}>
+                                    <MenuItem value="">
                                         <em>Unassigned</em>
                                     </MenuItem>
                                     {actors.map((actor) => (
-                                        <MenuItem key={actor.id} value={actor.id} sx={{ color: 'inherit' }}>
+                                        <MenuItem key={actor.id} value={actor.id}>
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                                 {actor.displayName}
                                                 {actor.kind === 'Agent' && (
-                                                    <Typography variant="caption" color="text.secondary">
+                                                    <Typography variant="caption" className="actor-kind">
                                                         (Agent)
                                                     </Typography>
                                                 )}

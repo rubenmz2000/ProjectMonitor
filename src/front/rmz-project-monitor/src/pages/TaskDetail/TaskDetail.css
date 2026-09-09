@@ -27,3 +27,42 @@
     white-space: pre-wrap;
     margin-top: 8px;
 }
+
+/* Contrast fixes: MUI runs with its default (light) palette, so any element
+   that relies on palette colors goes near-black on the RMZ-UI dark background.
+   Colors below come from the RMZ-UI variables in rmz-theme.css. */
+
+.task-detail-container .detail-subtitle,
+.task-detail-container .actor-kind,
+.assignee-menu .actor-kind {
+    color: var(--text-muted);
+}
+
+.task-detail-container .detail-chip {
+    color: var(--text);
+    border-color: var(--text-muted);
+}
+
+.task-detail-container .assignee-select {
+    color: var(--text);
+}
+
+.task-detail-container .assignee-select .MuiSelect-icon {
+    color: var(--text-muted);
+}
+
+.task-detail-container .assignee-select:not(.Mui-focused) .MuiOutlinedInput-notchedOutline {
+    border-color: var(--text-muted);
+}
+
+/* The dropdown is rendered in a portal, outside .task-detail-container */
+.MuiPaper-root.assignee-menu {
+    background-color: var(--bg-surface);
+    color: var(--text);
+}
+
+.MuiPaper-root.assignee-menu .MuiMenuItem-root:hover,
+.MuiPaper-root.assignee-menu .MuiMenuItem-root.Mui-selected,
+.MuiPaper-root.assignee-menu .MuiMenuItem-root.Mui-selected:hover {
+    background-color: var(--blue-glow);
+}
