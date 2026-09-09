@@ -8,82 +8,82 @@ namespace ProjectMonitor.API.Controllers;
 
 [Route("api/issues")]
 [ApiController]
-public class IssuesController(IRepository<Project> projectRepository, IRepository<ProjectTask> taskRepository, IRepository<Actor> actorRepository) : ControllerBase
+public class IssuesController(IRepository<Project> projectRepository, IRepository<Issue> issueRepository, IRepository<Actor> actorRepository) : ControllerBase
 {
-    [HttpGet("{taskIdentifier}")]
-    public IActionResult GetByTaskIdentifier(string taskIdentifier)
+    [HttpGet("{issueIdentifier}")]
+    public IActionResult GetByIssueIdentifier(string issueIdentifier)
     {
         // Validate format: should be PREFIX-NUMBER (e.g., PM-001)
-        var lastDashIndex = taskIdentifier.LastIndexOf('-');
-        if (lastDashIndex <= 0 || lastDashIndex >= taskIdentifier.Length - 1)
-            return BadRequest("Invalid task identifier format");
+        var lastDashIndex = issueIdentifier.LastIndexOf('-');
+        if (lastDashIndex <= 0 || lastDashIndex >= issueIdentifier.Length - 1)
+            return BadRequest("Invalid issue identifier format");
 
-        var prefix = taskIdentifier[..lastDashIndex].ToUpperInvariant();
-        var numberPart = taskIdentifier[(lastDashIndex + 1)..];
-        
-        if (!int.TryParse(numberPart, out int taskNumber))
-            return BadRequest("Invalid task identifier format: number part is not valid");
+        var prefix = issueIdentifier[..lastDashIndex].ToUpperInvariant();
+        var numberPart = issueIdentifier[(lastDashIndex + 1)..];
 
-        // Find project by TaskPrefix
-        var project = projectRepository.GetAll(p => p.TaskPrefix == prefix && !p.IsDeleted).FirstOrDefault();
+        if (!int.TryParse(numberPart, out int issueNumber))
+            return BadRequest("Invalid issue identifier format: number part is not valid");
+
+        // Find project by IssuePrefix
+        var project = projectRepository.GetAll(p => p.IssuePrefix == prefix && !p.IsDeleted).FirstOrDefault();
         if (project == null)
-            return NotFound("Project not found for the given task prefix");
+            return NotFound("Project not found for the given issue prefix");
 
-        // Find task with navigation properties loaded
-        var task = taskRepository.GetAll(t => t.ProjectId == project.Id && t.TaskNumber == taskNumber && !t.IsDeleted)
-            .Include(t => t.CreatedBy)
-            .Include(t => t.Assignee)
+        // Find issue with navigation properties loaded
+        var issue = issueRepository.GetAll(i => i.ProjectId == project.Id && i.IssueNumber == issueNumber && !i.IsDeleted)
+            .Include(i => i.CreatedBy)
+            .Include(i => i.Assignee)
             .FirstOrDefault();
-        if (task == null)
-            return NotFound("Task not found");
+        if (issue == null)
+            return NotFound("Issue not found");
 
-        var response = new TaskDetailResponseDto
+        var response = new IssueDetailResponseDto
         {
-            Id = task.Id,
-            TaskNumber = task.TaskNumber,
-            TaskIdentifier = $"{project.TaskPrefix}-{task.TaskNumber:D3}",
-            Title = task.Title,
-            Description = task.Description,
-            Status = task.Status,
-            Priority = task.Priority,
-            DueDate = task.DueDate == DateTime.MinValue ? null : task.DueDate,
-            CreationDate = task.CreationDate,
-            UpdatedAt = task.UpdatedAt,
+            Id = issue.Id,
+            IssueNumber = issue.IssueNumber,
+            IssueIdentifier = $"{project.IssuePrefix}-{issue.IssueNumber:D3}",
+            Title = issue.Title,
+            Description = issue.Description,
+            Status = issue.Status,
+            Priority = issue.Priority,
+            DueDate = issue.DueDate == DateTime.MinValue ? null : issue.DueDate,
+            CreationDate = issue.CreationDate,
+            UpdatedAt = issue.UpdatedAt,
             ProjectName = project.Name,
-            TaskPrefix = project.TaskPrefix,
-            CreatedBy = MapActor(task.CreatedBy),
-            Assignee = task.Assignee != null ? MapActor(task.Assignee) : null
+            IssuePrefix = project.IssuePrefix,
+            CreatedBy = MapActor(issue.CreatedBy),
+            Assignee = issue.Assignee != null ? MapActor(issue.Assignee) : null
         };
 
         return Ok(response);
     }
 
-    [HttpPatch("{taskIdentifier}/assign")]
-    public IActionResult UpdateAssignee(string taskIdentifier, [FromBody] UpdateAssigneeDto dto)
+    [HttpPatch("{issueIdentifier}/assign")]
+    public IActionResult UpdateAssignee(string issueIdentifier, [FromBody] UpdateAssigneeDto dto)
     {
         // Validate format: should be PREFIX-NUMBER (e.g., PM-001)
-        var lastDashIndex = taskIdentifier.LastIndexOf('-');
-        if (lastDashIndex <= 0 || lastDashIndex >= taskIdentifier.Length - 1)
-            return BadRequest("Invalid task identifier format");
+        var lastDashIndex = issueIdentifier.LastIndexOf('-');
+        if (lastDashIndex <= 0 || lastDashIndex >= issueIdentifier.Length - 1)
+            return BadRequest("Invalid issue identifier format");
 
-        var prefix = taskIdentifier[..lastDashIndex].ToUpperInvariant();
-        var numberPart = taskIdentifier[(lastDashIndex + 1)..];
-        
-        if (!int.TryParse(numberPart, out int taskNumber))
-            return BadRequest("Invalid task identifier format: number part is not valid");
+        var prefix = issueIdentifier[..lastDashIndex].ToUpperInvariant();
+        var numberPart = issueIdentifier[(lastDashIndex + 1)..];
 
-        // Find project by TaskPrefix
-        var project = projectRepository.GetAll(p => p.TaskPrefix == prefix && !p.IsDeleted).FirstOrDefault();
+        if (!int.TryParse(numberPart, out int issueNumber))
+            return BadRequest("Invalid issue identifier format: number part is not valid");
+
+        // Find project by IssuePrefix
+        var project = projectRepository.GetAll(p => p.IssuePrefix == prefix && !p.IsDeleted).FirstOrDefault();
         if (project == null)
-            return NotFound("Project not found for the given task prefix");
+            return NotFound("Project not found for the given issue prefix");
 
-        // Find task with navigation properties loaded
-        var task = taskRepository.GetAll(t => t.ProjectId == project.Id && t.TaskNumber == taskNumber && !t.IsDeleted)
-            .Include(t => t.CreatedBy)
-            .Include(t => t.Assignee)
+        // Find issue with navigation properties loaded
+        var issue = issueRepository.GetAll(i => i.ProjectId == project.Id && i.IssueNumber == issueNumber && !i.IsDeleted)
+            .Include(i => i.CreatedBy)
+            .Include(i => i.Assignee)
             .FirstOrDefault();
-        if (task == null)
-            return NotFound("Task not found");
+        if (issue == null)
+            return NotFound("Issue not found");
 
         // Validate assignee if provided
         if (dto.AssigneeId.HasValue)
@@ -93,36 +93,36 @@ public class IssuesController(IRepository<Project> projectRepository, IRepositor
                 return NotFound("Assignee not found");
         }
 
-        task.AssigneeId = dto.AssigneeId;
-        task.UpdatedAt = DateTime.UtcNow;
+        issue.AssigneeId = dto.AssigneeId;
+        issue.UpdatedAt = DateTime.UtcNow;
 
-        taskRepository.Update(task);
-        var saved = taskRepository.SaveChanges();
+        issueRepository.Update(issue);
+        var saved = issueRepository.SaveChanges();
         if (!saved)
             return StatusCode(500, "Failed to update assignee");
 
         // Reload with navigation properties after save
-        var updatedTask = taskRepository.GetAll(t => t.Id == task.Id)
-            .Include(t => t.CreatedBy)
-            .Include(t => t.Assignee)
+        var updatedIssue = issueRepository.GetAll(i => i.Id == issue.Id)
+            .Include(i => i.CreatedBy)
+            .Include(i => i.Assignee)
             .First();
 
-        var response = new TaskDetailResponseDto
+        var response = new IssueDetailResponseDto
         {
-            Id = updatedTask.Id,
-            TaskNumber = updatedTask.TaskNumber,
-            TaskIdentifier = $"{project.TaskPrefix}-{updatedTask.TaskNumber:D3}",
-            Title = updatedTask.Title,
-            Description = updatedTask.Description,
-            Status = updatedTask.Status,
-            Priority = updatedTask.Priority,
-            DueDate = updatedTask.DueDate == DateTime.MinValue ? null : updatedTask.DueDate,
-            CreationDate = updatedTask.CreationDate,
-            UpdatedAt = updatedTask.UpdatedAt,
+            Id = updatedIssue.Id,
+            IssueNumber = updatedIssue.IssueNumber,
+            IssueIdentifier = $"{project.IssuePrefix}-{updatedIssue.IssueNumber:D3}",
+            Title = updatedIssue.Title,
+            Description = updatedIssue.Description,
+            Status = updatedIssue.Status,
+            Priority = updatedIssue.Priority,
+            DueDate = updatedIssue.DueDate == DateTime.MinValue ? null : updatedIssue.DueDate,
+            CreationDate = updatedIssue.CreationDate,
+            UpdatedAt = updatedIssue.UpdatedAt,
             ProjectName = project.Name,
-            TaskPrefix = project.TaskPrefix,
-            CreatedBy = MapActor(updatedTask.CreatedBy),
-            Assignee = updatedTask.Assignee != null ? MapActor(updatedTask.Assignee) : null
+            IssuePrefix = project.IssuePrefix,
+            CreatedBy = MapActor(updatedIssue.CreatedBy),
+            Assignee = updatedIssue.Assignee != null ? MapActor(updatedIssue.Assignee) : null
         };
 
         return Ok(response);

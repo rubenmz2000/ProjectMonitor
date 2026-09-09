@@ -21,7 +21,7 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
                 Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
-                TaskPrefix = p.TaskPrefix,
+                IssuePrefix = p.IssuePrefix,
                 Status = p.Status,
                 UpdatedAt = p.UpdatedAt
             })
@@ -38,7 +38,7 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
             Id = project.Id,
             Name = project.Name,
             Description = project.Description,
-            TaskPrefix = project.TaskPrefix,
+            IssuePrefix = project.IssuePrefix,
             Status = project.Status,
             UpdatedAt = project.UpdatedAt
         });
@@ -55,7 +55,7 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
                 Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
-                TaskPrefix = p.TaskPrefix,
+                IssuePrefix = p.IssuePrefix,
                 Status = p.Status,
                 UpdatedAt = p.UpdatedAt
             })
@@ -82,18 +82,18 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
         if (alreadyCreated)
             return BadRequest("This project is already created");
         
-        // Auto-generate TaskPrefix if empty or null
-        var taskPrefix = string.IsNullOrWhiteSpace(projectDto.TaskPrefix) 
-            ? GenerateTaskPrefix(projectDto.Name) 
-            : projectDto.TaskPrefix;
+        // Auto-generate IssuePrefix if empty or null
+        var issuePrefix = string.IsNullOrWhiteSpace(projectDto.IssuePrefix) 
+            ? GenerateIssuePrefix(projectDto.Name) 
+            : projectDto.IssuePrefix;
         
         // Normalize to uppercase and remove non-alphanumeric characters
-        taskPrefix = new string(taskPrefix.ToUpperInvariant().Where(char.IsLetterOrDigit).Take(5).ToArray());
+        issuePrefix = new string(issuePrefix.ToUpperInvariant().Where(char.IsLetterOrDigit).Take(5).ToArray());
         
-        // Validate TaskPrefix uniqueness
-        var prefixExists = projectRepository.GetAll(p => p.TaskPrefix == taskPrefix && !p.IsDeleted).Any();
+        // Validate IssuePrefix uniqueness
+        var prefixExists = projectRepository.GetAll(p => p.IssuePrefix == issuePrefix && !p.IsDeleted).Any();
         if (prefixExists)
-            return BadRequest($"Task prefix '{taskPrefix}' is already in use. Please choose a different one.");
+            return BadRequest($"Issue prefix '{issuePrefix}' is already in use. Please choose a different one.");
         
         var now = DateTime.UtcNow;
         var project = new Project
@@ -101,12 +101,12 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
             Id = Guid.NewGuid(),
             Name = projectDto.Name,
             Description = projectDto.Description,
-            TaskPrefix = taskPrefix,
+            IssuePrefix = issuePrefix,
             CreationDate = now,
             UpdatedAt = now,
             Status = ProjectStatus.NotStarted,
             IsDeleted = false,
-            Tasks = []
+            Issues = []
         };
         projectRepository.Add(project);
         try
@@ -123,7 +123,7 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
         }
     }
     
-    private string GenerateTaskPrefix(string projectName)
+    private string GenerateIssuePrefix(string projectName)
     {
         var words = projectName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         
@@ -147,7 +147,7 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
         if (project == null) return NotFound();
         project.Name = projectDto.Name;
         project.Description = projectDto.Description;
-        project.TaskPrefix = projectDto.TaskPrefix.ToUpperInvariant();
+        project.IssuePrefix = projectDto.IssuePrefix.ToUpperInvariant();
         project.UpdatedAt = DateTime.UtcNow;
         return Ok(projectRepository.SaveChanges());
     }

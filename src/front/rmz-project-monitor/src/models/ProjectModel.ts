@@ -2,7 +2,7 @@ export interface Project {
     id: string,
     name: string,
     description: string,
-    taskPrefix: string,
+    issuePrefix: string,
     status: string,
     updatedAt: string
 }

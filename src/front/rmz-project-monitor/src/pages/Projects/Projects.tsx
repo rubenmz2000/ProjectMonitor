@@ -52,7 +52,7 @@ function Projects({ triggerAlert }: { triggerAlert: (message: string, severity?:
     }, [fetchProjects]);
 
     const handleProjectClick = (projectId: string) => {
-        navigate(`/projects/${projectId}/tasks`);
+        navigate(`/projects/${projectId}/issues`);
     };
 
     return <>
@@ -82,7 +82,7 @@ function Projects({ triggerAlert }: { triggerAlert: (message: string, severity?:
                             onClick={() => handleProjectClick(project.id)}
                             sx={{ cursor: 'pointer', '&:hover': { boxShadow: 4 } }}
                         >
-                            <Typography variant={"h6"}>{project.name} ({project.taskPrefix})</Typography>
+                            <Typography variant={"h6"}>{project.name} ({project.issuePrefix})</Typography>
                             <Typography variant={"body2"}>{project.status}</Typography>
                             <Typography variant={'body2'}>{dayjs.utc(project.updatedAt).local().fromNow()}</Typography>
                         </Card>

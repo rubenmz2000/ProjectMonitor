@@ -5,10 +5,10 @@ export interface Actor {
   kind: string;
 }
 
-export interface TaskDetailData {
+export interface IssueDetailData {
   id: string;
-  taskNumber: number;
-  taskIdentifier: string;
+  issueNumber: number;
+  issueIdentifier: string;
   title: string;
   description: string;
   status: string;
@@ -17,7 +17,7 @@ export interface TaskDetailData {
   creationDate: string;
   updatedAt: string;
   projectName: string;
-  taskPrefix: string;
+  issuePrefix: string;
   createdBy: Actor;
   assignee: Actor | null;
 }

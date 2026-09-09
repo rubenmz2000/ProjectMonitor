@@ -4,22 +4,22 @@ import { Button, Typography, CircularProgress, Alert, Box, Card } from "@mui/mat
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import type { Project } from '../../models/ProjectModel.ts';
-import type { ProjectTask } from '../../models/ProjectTaskModel.ts';
-import { getProjectById, getProjectTasks } from '../../serivces/ApiService.ts';
+import type { Issue } from '../../models/IssueModel.ts';
+import { getProjectById, getProjectIssues } from '../../serivces/ApiService.ts';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import CreateTaskDialog from '../../components/Dialogs/CreateTask/CreateTaskDialog.tsx';
-import './ProjectTasks.css';
+import CreateIssueDialog from '../../components/Dialogs/CreateIssue/CreateIssueDialog.tsx';
+import './ProjectIssues.css';
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
 
-function ProjectTasks({ triggerAlert }: { triggerAlert: (message: string, severity?: string) => void }) {
+function ProjectIssues({ triggerAlert }: { triggerAlert: (message: string, severity?: string) => void }) {
     const { projectId } = useParams<{ projectId: string }>();
     const navigate = useNavigate();
     const [project, setProject] = useState<Project | null>(null);
-    const [tasks, setTasks] = useState<ProjectTask[]>([]);
+    const [issues, setIssues] = useState<Issue[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -29,16 +29,16 @@ function ProjectTasks({ triggerAlert }: { triggerAlert: (message: string, severi
         setLoading(true);
         setError(null);
         try {
-            const [projectData, tasksData] = await Promise.all([
+            const [projectData, issuesData] = await Promise.all([
                 getProjectById(projectId),
-                getProjectTasks(projectId)
+                getProjectIssues(projectId)
             ]);
             setProject(projectData);
-            setTasks(tasksData);
+            setIssues(issuesData);
         } catch (err) {
-            setError('Failed to load project or tasks');
+            setError('Failed to load project or issues');
             setProject(null);
-            setTasks([]);
+            setIssues([]);
         } finally {
             setLoading(false);
         }
@@ -48,16 +48,16 @@ function ProjectTasks({ triggerAlert }: { triggerAlert: (message: string, severi
         fetchData();
     }, [fetchData]);
 
-    const handleCreateTask = () => {
+    const handleCreateIssue = () => {
         setDialogOpen(true);
     };
 
-    const handleDialogClose = (result: string, taskIdentifier?: string) => {
+    const handleDialogClose = (result: string, issueIdentifier?: string) => {
         if (result === 'submit') {
-            triggerAlert(`Task ${taskIdentifier} created successfully`, 'success');
+            triggerAlert(`Issue ${issueIdentifier} created successfully`, 'success');
             fetchData();
         } else if (result === 'error') {
-            triggerAlert('An error occurred while creating the task', 'error');
+            triggerAlert('An error occurred while creating the issue', 'error');
         }
         setDialogOpen(false);
     };
@@ -71,7 +71,7 @@ function ProjectTasks({ triggerAlert }: { triggerAlert: (message: string, severi
             <Button startIcon={<ArrowBackIcon />} onClick={handleBack} sx={{ mb: 2 }}>
                 Back to Projects
             </Button>
-            
+
             {loading ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
                     <CircularProgress />
@@ -92,47 +92,47 @@ function ProjectTasks({ triggerAlert }: { triggerAlert: (message: string, severi
                     <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box>
                             <Typography variant={'h4'}>
-                                {project.name} ({project.taskPrefix})
+                                {project.name} ({project.issuePrefix})
                             </Typography>
                             <Typography variant={'body2'} className="empty-state">
                                 {project.description}
                             </Typography>
                         </Box>
-                        <Button 
-                            variant="contained" 
+                        <Button
+                            variant="contained"
                             startIcon={<AddIcon />}
-                            onClick={handleCreateTask}
+                            onClick={handleCreateIssue}
                         >
-                            Create Task
+                            Create Issue
                         </Button>
                     </Box>
 
-                    <Typography variant={'h5'} sx={{ mb: 2 }}>Tasks</Typography>
-                    
+                    <Typography variant={'h5'} sx={{ mb: 2 }}>Issues</Typography>
+
                     <div className={'projects-list'}>
-                        {tasks.length === 0 ? (
+                        {issues.length === 0 ? (
                             <Typography variant="body1" className="empty-state" sx={{ py: 4, textAlign: 'center' }}>
-                                No tasks yet. Create your first task to get started.
+                                No issues yet. Create your first issue to get started.
                             </Typography>
                         ) : (
-                            tasks.map((task) => (
+                            issues.map((issue) => (
                                 <Card
-                                    key={task.id}
+                                    key={issue.id}
                                     className={'project-card'}
                                     sx={{ cursor: 'pointer' }}
-                                    onClick={() => navigate(`/issues/${task.taskIdentifier}`)}
+                                    onClick={() => navigate(`/issues/${issue.issueIdentifier}`)}
                                 >
-                                    <Typography variant={"h6"}>{task.taskIdentifier}</Typography>
-                                    <Typography variant={"subtitle1"}>{task.title}</Typography>
-                                    <Typography variant={"body2"}>Status: {task.status}</Typography>
-                                    <Typography variant={"body2"}>Priority: {task.priority}</Typography>
-                                    {task.dueDate && (
+                                    <Typography variant={"h6"}>{issue.issueIdentifier}</Typography>
+                                    <Typography variant={"subtitle1"}>{issue.title}</Typography>
+                                    <Typography variant={"body2"}>Status: {issue.status}</Typography>
+                                    <Typography variant={"body2"}>Priority: {issue.priority}</Typography>
+                                    {issue.dueDate && (
                                         <Typography variant={'body2'}>
-                                            Due: {dayjs.utc(task.dueDate).format('DD/MM/YYYY')}
+                                            Due: {dayjs.utc(issue.dueDate).format('DD/MM/YYYY')}
                                         </Typography>
                                     )}
                                     <Typography variant={'body2'}>
-                                        Created: {dayjs.utc(task.creationDate).local().fromNow()}
+                                        Created: {dayjs.utc(issue.creationDate).local().fromNow()}
                                     </Typography>
                                 </Card>
                             ))
@@ -142,14 +142,14 @@ function ProjectTasks({ triggerAlert }: { triggerAlert: (message: string, severi
             )}
         </div>
         {project && (
-            <CreateTaskDialog 
-                open={dialogOpen} 
+            <CreateIssueDialog
+                open={dialogOpen}
                 projectId={projectId!}
-                taskPrefix={project.taskPrefix}
-                onClose={handleDialogClose} 
+                issuePrefix={project.issuePrefix}
+                onClose={handleDialogClose}
             />
         )}
     </>
 }
 
-export default ProjectTasks;
+export default ProjectIssues;

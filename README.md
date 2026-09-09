@@ -70,10 +70,10 @@ for real authentication.
 
 ## Current state (short)
 
-Projects can be created and listed; each project has a task prefix. Tasks (internally `ProjectTask`)
-can be created and listed per project, have a stable GUID plus a human identifier like `PM-001`,
-a status, a priority, a creator and an optional assignee. Actors can be humans or agents (Rubén and
-Iris are seeded). A task detail view allows changing the assignee. There is no endpoint yet to
-change a task's status or edit it, no session/handoff/activity model, and the UI is provisional.
+Projects can be created and listed; each project has an issue prefix. Issues can be created and
+listed per project, have a stable GUID plus a human identifier like `PM-001`, a status, a priority,
+a creator and an optional assignee. Actors can be humans or agents (Rubén and Iris are seeded). An
+issue detail view allows changing the assignee. There is no endpoint yet to change an issue's
+status or edit it, no session/handoff/activity model, and the UI is provisional.
 
 Details and history: [`docs/current-state.md`](docs/current-state.md).

@@ -4,7 +4,7 @@ This document separates what is **decided**, what is **implemented**, and what i
 Do not treat the conceptual parts as implemented; check [current-state.md](current-state.md) and
 the code.
 
-## Issue (currently `ProjectTask` in code)
+## Issue
 
 Concept: a generic unit of work. Not limited to software development; it can represent
 programming, hardware, research, documentation, configuration, testing or other kinds of work.
@@ -20,15 +20,16 @@ Decided:
   forward, and may be a human or an agent.
 - State and assignment are independent dimensions.
 
-Implemented today: title, description (short, max 300 chars), status (`ToDo`, `InProgress`,
-`Blocked`, `Done`, `Cancelled`), priority, due date, creator, assignee, soft delete. Status is set
-to `ToDo` on creation and there is no way to change it yet. These states are **provisional**.
+- The name is `Issue`, in code, database, API, UI and docs (decided in PM-0006; the entity was
+  previously called `ProjectTask`).
+- The description has no length limit: it is where the persistent context of the issue lives.
+
+Implemented today: title, description, status (`ToDo`, `InProgress`, `Blocked`, `Done`,
+`Cancelled`), priority, due date, creator, assignee, soft delete. Status is set to `ToDo` on
+creation and there is no way to change it yet. These states are **provisional**.
 
 Open:
 
-- The product name and code name: `Issue` is the preferred concept, but the rename of
-  `ProjectTask` → `Issue` (entity, table, DTOs, routes, UI) is not decided. Routes under
-  `/api/issues` and `/issues/:id` already use the word.
 - Definitive workflow: states, their meaning as phases, and allowed transitions.
 - What an issue must contain to be a real source of truth (context, decisions, pending items,
   acceptance...) and which of those belong directly to the issue vs. to related entities.
@@ -44,7 +45,7 @@ Decided and implemented (PM-0005):
 - Rubén (`ruben`, Human) and Iris (`iris`, Agent) are seeded by migration.
 - Issues have a required `CreatedBy` and an optional `Assignee`, both actors.
 - The acting actor is identified by an `X-Actor-Identifier` HTTP header. This is a transitory
-  mechanism, explicitly meant to be replaced by real authentication. Today only task creation
+  mechanism, explicitly meant to be replaced by real authentication. Today only issue creation
   reads it; assignment changes are not attributed to anyone.
 
 Open:
@@ -93,7 +94,7 @@ Open:
 | Issue identity (GUID + `PREFIX-NNN`) | yes | yes | — |
 | Reporter / assignee as actors | yes | yes | attribution of changes |
 | State ≠ assignment | yes | data model only | states, transitions, endpoint |
-| `Issue` naming | preferred | routes only | full rename |
+| `Issue` naming | yes | yes | — |
 | Actor identity | transitory header | partial | real authentication |
 | Session | direction | no | model, start, result |
 | Handoffs / history | direction | no | representation, models |

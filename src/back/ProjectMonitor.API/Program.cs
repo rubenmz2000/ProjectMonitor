@@ -14,7 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IRepository<Project>, ProjectRepository>();
-builder.Services.AddScoped<IRepository<ProjectTask>, ProjectTaskRepository>();
+builder.Services.AddScoped<IRepository<Issue>, IssueRepository>();
 builder.Services.AddScoped<IRepository<Actor>, ActorRepository>();
 builder.Services.AddCors(options =>
 {
