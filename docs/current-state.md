@@ -1,4 +1,4 @@
-# Current state (as of PM-0007)
+# Current state (as of PM-0008)
 
 What actually exists in the repository. Update this when an issue is merged; keep it a snapshot,
 not a changelog (the git history is the changelog).
@@ -14,6 +14,7 @@ not a changelog (the git history is the changelog).
 | PM-0005 | `Actor` model (Human/Agent), `CreatedBy` and `Assignee`, actor header, assignee change |
 | PM-0006 | Rename `ProjectTask` → `Issue` everywhere (code, database via rename migration, API, UI, docs); description length limit removed |
 | PM-0007 | `IssueActivity` append-only history (`Created`, `AssigneeChanged`, `Comment`), actor mandatory on all issue mutations, comments and activity endpoints, activity panel in the issue detail |
+| PM-0008 | UI foundation: RMZ-UI tokens + MUI dark theme, app shell (sidebar, top bar, breadcrumbs, current actor), alert context, project routes by prefix |
 
 PM-0001 to PM-0003 were numbered provisionally, before Project Monitor could manage its own
 workflow.
@@ -33,6 +34,7 @@ workflow.
   - `GET/POST /api/projects/{projectId}/issues` (POST requires `X-Actor-Identifier`)
   - `GET /api/issues/{PREFIX-NNN}`, `PATCH /api/issues/{PREFIX-NNN}/assign` (`{ assigneeId, note? }`, requires actor)
   - `GET /api/issues/{PREFIX-NNN}/activity`, `POST /api/issues/{PREFIX-NNN}/comments` (requires actor)
+  - `GET /api/projects/{prefix}` (project by issue prefix)
   - `GET /api/actors` (active actors)
 - `IssueActivity`: actor, timestamp, type, old/new value (max 100), body (no limit); index on
   `(IssueId, OccurredAt)`. `Created` was backfilled for existing issues.
@@ -41,11 +43,16 @@ workflow.
 
 ## Frontend
 
-- Routes: `/` (dashboard), `/projects`, `/projects/:projectId/issues`, `/issues/:issueIdentifier`.
-- Navigation: Dashboard and Projects only.
-- Actor identity is injected on state-changing requests from `VITE_ACTOR_IDENTIFIER`.
-- The UI is provisional; RMZ-UI is a CSS theme file plus Navbar/Footer, and MUI runs with its
-  default palette.
+- Routes: `/` (dashboard), `/projects`, `/projects/:prefix` (redirects to issues),
+  `/projects/:prefix/issues`, `/issues/:issueIdentifier`.
+- App shell (`src/app/shell`): left sidebar with global navigation plus a contextual section for
+  the project of the current route, top bar with breadcrumbs and the current actor chip.
+- RMZ-UI (`src/rmz-ui`): tokens, MUI dark theme via `RmzThemeProvider`, generic shell
+  components and `useAlert()`; no application concepts inside.
+- Actor identity is injected on state-changing requests from `VITE_ACTOR_IDENTIFIER` and shown
+  in the top bar.
+- The pages themselves (dashboard, project list, issue list, issue detail) are still the
+  provisional ones, now rendered inside the shell; they are redesigned in the following issues.
 
 ## Known gaps and rough edges
 

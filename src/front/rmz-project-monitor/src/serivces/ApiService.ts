@@ -42,6 +42,11 @@ export const getProjectById = async (id: string): Promise<Project> => {
     return response.data;
 }
 
+export const getProjectByPrefix = async (prefix: string): Promise<Project> => {
+    const response = await apiClient.get(`/Projects/${prefix}`);
+    return response.data;
+}
+
 export const getStatusCount = async (): Promise<StatusCount[]> => {
     const response = await apiClient.get('/Projects/status-count');
     return response.data;

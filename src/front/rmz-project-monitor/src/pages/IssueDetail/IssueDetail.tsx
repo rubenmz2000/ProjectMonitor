@@ -91,7 +91,7 @@ function IssueDetail() {
                         <Typography variant="h4">
                             {issue.issueIdentifier}
                         </Typography>
-                        <Typography variant="subtitle1" className="detail-subtitle">
+                        <Typography variant="subtitle1" color="text.secondary">
                             {issue.projectName} ({issue.issuePrefix})
                         </Typography>
                     </Box>
@@ -117,7 +117,6 @@ function IssueDetail() {
                                 label={issue.status}
                                 size="small"
                                 variant="outlined"
-                                className="detail-chip"
                             />
                         </Box>
 
@@ -127,7 +126,6 @@ function IssueDetail() {
                                 label={issue.priority}
                                 size="small"
                                 variant="outlined"
-                                className="detail-chip"
                             />
                         </Box>
 
@@ -138,10 +136,9 @@ function IssueDetail() {
                                     label={issue.createdBy.displayName}
                                     size="small"
                                     variant="outlined"
-                                    className="detail-chip"
                                 />
                                 {issue.createdBy.kind === 'Agent' && (
-                                    <Typography variant="caption" className="actor-kind" sx={{ ml: 1 }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
                                         (Agent)
                                     </Typography>
                                 )}
@@ -156,8 +153,6 @@ function IssueDetail() {
                                     onChange={(e) => handleAssigneeChange(e.target.value)}
                                     disabled={updatingAssignee}
                                     displayEmpty
-                                    className="assignee-select"
-                                    MenuProps={{ slotProps: { paper: { className: 'assignee-menu' } } }}
                                 >
                                     <MenuItem value="">
                                         <em>Unassigned</em>
@@ -167,7 +162,7 @@ function IssueDetail() {
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                                 {actor.displayName}
                                                 {actor.kind === 'Agent' && (
-                                                    <Typography variant="caption" className="actor-kind">
+                                                    <Typography variant="caption" color="text.secondary">
                                                         (Agent)
                                                     </Typography>
                                                 )}

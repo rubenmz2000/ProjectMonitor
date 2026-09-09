@@ -8,8 +8,10 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import CreateProjectDialog from '../../Dialogs/CreateProject/CreateProjectDialog.tsx'
+import { useAlert } from '../../../rmz-ui/index.ts';
 
-function ProjectsList({ triggerAlert }: { triggerAlert: (message: string, severity?: string) => void }) {
+function ProjectsList() {
+    const { notify } = useAlert();
     const [projects, setProjects] = useState<Project[]>([]);
 
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -20,9 +22,9 @@ function ProjectsList({ triggerAlert }: { triggerAlert: (message: string, severi
         if (result === 'cancel') {
             // User cancelled, no action needed
         } else if (result === 'submit') {
-            triggerAlert('Project created successfully');
+            notify('Project created successfully');
         } else {
-            triggerAlert('An error occurred while creating the project', 'error');
+            notify('An error occurred while creating the project', 'error');
         }
         setDialogOpen(false);
     };

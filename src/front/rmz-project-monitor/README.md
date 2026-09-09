@@ -10,6 +10,7 @@ pnpm build    # tsc -b && vite build
 pnpm lint
 ```
 
-Styling: RMZ-UI lives in `src/rmz-ui/` (a CSS theme file plus Navbar/Footer). MUI is used without
-a custom theme, so use the RMZ-UI CSS variables (`--text`, `--text-muted`, `--bg-surface`, ...)
-instead of MUI palette colors wherever contrast matters.
+Styling: RMZ-UI lives in `src/rmz-ui/` — tokens (`theme/tokens.ts`), the MUI dark theme and the
+generic shell. MUI components take their colors from the theme; plain CSS uses the CSS custom
+properties the provider emits (`--text`, `--text-muted`, `--space-4`, ...). Do not patch colors per
+component. Application-specific shell composition is in `src/app/`.

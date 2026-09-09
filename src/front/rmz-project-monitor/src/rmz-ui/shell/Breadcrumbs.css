@@ -1,0 +1,26 @@
+.rmz-breadcrumbs {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.rmz-breadcrumbs .MuiBreadcrumbs-separator {
+    color: var(--text-muted);
+    margin: 0 var(--space-1);
+}
+
+.rmz-breadcrumbs__link {
+    color: var(--text-muted);
+    transition: color 0.15s ease;
+}
+
+.rmz-breadcrumbs__link:hover {
+    color: var(--text);
+}
+
+.rmz-breadcrumbs__current {
+    color: var(--text);
+    font-family: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+}

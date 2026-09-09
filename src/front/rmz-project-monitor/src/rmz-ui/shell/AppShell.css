@@ -1,0 +1,38 @@
+.rmz-shell {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-rows: var(--topbar-height) 1fr;
+    grid-template-areas:
+        "sidebar topbar"
+        "sidebar content";
+    height: 100dvh;
+    background: var(--bg);
+    color: var(--text);
+    transition: grid-template-columns 0.2s ease;
+}
+
+.rmz-shell--collapsed {
+    grid-template-columns: var(--sidebar-collapsed-width) 1fr;
+}
+
+.rmz-shell__sidebar {
+    grid-area: sidebar;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border);
+    overflow: hidden auto;
+}
+
+.rmz-shell__topbar {
+    grid-area: topbar;
+    display: flex;
+    align-items: center;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 var(--space-5);
+}
+
+.rmz-shell__content {
+    grid-area: content;
+    overflow: auto;
+    padding: var(--space-5);
+}

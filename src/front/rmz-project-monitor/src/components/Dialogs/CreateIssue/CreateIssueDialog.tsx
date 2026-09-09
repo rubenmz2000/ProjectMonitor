@@ -39,30 +39,11 @@ export default function CreateIssueDialog({
     }
 
     return <>
-        <Dialog open={open} slotProps={{
-            paper: {
-                sx: {
-                    background: 'var(--bg-surface)',
-                    color: 'var(--text)',
-                    '& .MuiDialogContextText-root': {
-                        color: 'var(--text)'
-                    },
-                    '& .MuiInputBase-root': {
-                        color: 'var(--text)'
-                    },
-                    '& .MuiInputLabel-root': {
-                        color: 'var(--text-muted)'
-                    },
-                    '& .MuiOutlinedInput-root:not(.Mui-focused) .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'var(--text-muted)'
-                    },
-                }
-            }
-        }} maxWidth="sm" fullWidth>
+        <Dialog open={open} maxWidth="sm" fullWidth>
             <DialogTitle>Create Issue</DialogTitle>
-            <Divider sx={{ borderColor: 'var(--text-muted)' }} />
+            <Divider />
             <DialogContent>
-                <DialogContentText sx={{ color: 'var(--text)', mb: 2 }}>
+                <DialogContentText sx={{ mb: 2 }}>
                     Create a new issue for project {issuePrefix}
                 </DialogContentText>
                 <form id="issue-form" onSubmit={HandleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
