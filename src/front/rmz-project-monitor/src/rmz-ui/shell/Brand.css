@@ -1,0 +1,21 @@
+.rmz-brand {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--text);
+}
+
+.rmz-brand__wordmark {
+    font-size: 1.15rem;
+}
+
+.rmz-brand__wordmark span,
+.rmz-brand__mark {
+    color: var(--blue);
+}
+
+.rmz-brand__mark {
+    font-size: 1rem;
+}

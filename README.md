@@ -32,9 +32,10 @@ AGENTS.md                     Rules for agent sessions working on this repo
 - Backend: .NET 10, ASP.NET Core Web API, EF Core 10 with SQL Server. Repository pattern over
   `IQueryable`, Fluent API configurations, code-first migrations applied automatically on startup.
 - Frontend: React 19, TypeScript, Vite, MUI, axios, dayjs, recharts. Package manager: pnpm.
-- UI: **RMZ-UI**, currently a CSS file (`src/rmz-ui/rmz-theme.css`) plus a couple of components
-  inside the frontend, not a separate package. MUI is used without a custom theme, so colors
-  should come from the RMZ-UI CSS variables rather than MUI palette colors.
+- UI: **RMZ-UI** (`src/rmz-ui/`): design tokens, a MUI dark theme built from them, and generic
+  shell components (sidebar, top bar, breadcrumbs, alerts). Reusable by design: nothing in it
+  knows about Project Monitor concepts. Not a separate package yet. See
+  [`docs/ui-architecture.md`](docs/ui-architecture.md).
 
 ## Running in development
 

@@ -1,0 +1,97 @@
+.rmz-sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+}
+
+.rmz-sidebar__brand {
+    display: flex;
+    align-items: center;
+    height: var(--topbar-height);
+    padding: 0 var(--space-4);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.rmz-sidebar__sections {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-4) var(--space-2);
+    overflow: hidden auto;
+}
+
+.rmz-sidebar__section-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 var(--space-3);
+    margin-bottom: var(--space-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rmz-sidebar__items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.rmz-sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    transition: color 0.15s ease, background-color 0.15s ease;
+    white-space: nowrap;
+}
+
+.rmz-sidebar__item:hover {
+    color: var(--text);
+    background: var(--blue-glow);
+}
+
+.rmz-sidebar__item--active {
+    color: var(--blue-bright);
+    background: var(--blue-glow);
+}
+
+.rmz-sidebar__item-icon {
+    display: inline-flex;
+    width: 20px;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rmz-sidebar__item-icon svg {
+    font-size: 1.2rem;
+}
+
+.rmz-sidebar--collapsed .rmz-sidebar__item {
+    justify-content: center;
+    padding: var(--space-2);
+}
+
+.rmz-sidebar__footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--space-2);
+    border-top: 1px solid var(--border);
+}
+
+.rmz-sidebar--collapsed .rmz-sidebar__footer {
+    justify-content: center;
+}

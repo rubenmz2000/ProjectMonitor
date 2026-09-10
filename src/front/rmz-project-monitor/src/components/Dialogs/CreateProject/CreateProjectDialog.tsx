@@ -8,7 +8,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import './CreateProjectDialog.css';
-import '../../../rmz-ui/rmz-theme.css';
 import {addProject} from '../../../serivces/ApiService.ts'
 
 function generateIssuePrefix(projectName: string): string {
@@ -66,43 +65,22 @@ export default function CreateProjectDialog({open, onClose}: {open: boolean, onC
     }
     
     return <>
-        <Dialog className={'create-dialog'} open={open}  slotProps={{
-            paper: {
-                sx: {
-                    background: 'var(--bg-surface)',
-                    color: 'var(--text)',
-                    '& .MuiDialogContextText-root': {
-                        color: 'var(--text)'
-                    },
-                    '& .MuiInputBase-root': {
-                        color: 'var(--text)'
-                    },
-                    '& .MuiInputLabel-root': {
-                        color: 'var(--text-muted)'
-                    },
-                    '& .MuiOutlinedInput-root:not(.Mui-focused) .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'var(--text-muted)'
-                    },
-                }
-            }
-        }} >
+        <Dialog className={'create-dialog'} open={open}>
             <DialogTitle>Create Project</DialogTitle>
-            <Divider sx={{ borderColor: 'var(--text-muted)'}} />
+            <Divider />
             <DialogContent>
-                <DialogContentText sx={{ color: 'var(--text)' }}>Create a new project</DialogContentText>
+                <DialogContentText>Create a new project</DialogContentText>
                 <form className={"create-dialog-inputs"} id={"project-form"} onSubmit={HandleSubmit}>
                     <TextField 
                         required 
                         name={"name"} 
                         value={projectName}
                         onChange={(e) => setProjectName(e.target.value)}
-                        sx={{ borderColor: 'var(--text-muted)'}} 
                         label={"Project name"} 
                     />
                     <TextField 
                         required 
                         name={"description"} 
-                        sx={{ borderColor: 'var(--text-muted)'}} 
                         multiline 
                         label={"Project description"} 
                     />
@@ -110,7 +88,6 @@ export default function CreateProjectDialog({open, onClose}: {open: boolean, onC
                         name={"issuePrefix"} 
                         value={issuePrefix}
                         onChange={(e) => setIssuePrefix(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5))}
-                        sx={{ borderColor: 'var(--text-muted)'}} 
                         label={"Issue Prefix"} 
                         helperText={suggestedPrefix ? `Suggested: ${suggestedPrefix}` : "Auto-generated from name if empty. Max 5 alphanumeric chars."}
                         slotProps={{ htmlInput: { maxLength: 5, pattern: '[A-Za-z0-9]*' } }}

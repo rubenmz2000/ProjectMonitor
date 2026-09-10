@@ -25,7 +25,9 @@ that a new session can work without the basics being repeated every time. Keep t
 - Keep changes limited to what the issue asks for. No redesigns, refactors, renames or "while
   we're here" improvements that were not requested; if you spot something, mention it instead.
 - Do not start features that are still open questions in `docs/domain-model.md`.
-- The UI is provisional: do not do isolated visual redesigns.
+- The UI is being rebuilt issue by issue (see `docs/ui-architecture.md`): do not do isolated
+  visual redesigns outside that plan, keep `src/rmz-ui/` free of application concepts, and take
+  colors from the theme/tokens — no per-component color patches.
 
 ## Other people's changes and local environment
 

@@ -3,11 +3,11 @@ import StatusGraphic from './../../components/Dashboard/StatusGraphic/StatusGrap
 import './Dashboard.css'
 import {Card} from "@mui/material";
 
-function Dashboard({ triggerAlert }: { triggerAlert: (message: string, severity?: string) => void }) {
+function Dashboard() {
     return <>
         <div className={'dashboard-container'}>
             <Card className={'dashboard-card'}>
-                <ProjectsList triggerAlert={triggerAlert} />
+                <ProjectsList />
             </Card>
             <Card className={'dashboard-card'}>
                 <StatusGraphic />

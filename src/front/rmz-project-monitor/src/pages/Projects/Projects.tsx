@@ -9,11 +9,13 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import CreateProjectDialog from '../../components/Dialogs/CreateProject/CreateProjectDialog.tsx';
+import { useAlert } from '../../rmz-ui/index.ts';
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
 
-function Projects({ triggerAlert }: { triggerAlert: (message: string, severity?: string) => void }) {
+function Projects() {
+    const { notify } = useAlert();
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -25,10 +27,10 @@ function Projects({ triggerAlert }: { triggerAlert: (message: string, severity?:
     };
     const handleClose = (result: string) => {
         if (result === 'submit') {
-            triggerAlert('Project created successfully', 'success');
+            notify('Project created successfully', 'success');
             fetchProjects();
         } else if (result === 'error') {
-            triggerAlert('An error occurred while creating the project', 'error');
+            notify('An error occurred while creating the project', 'error');
         }
         setDialogOpen(false);
     };
@@ -51,8 +53,8 @@ function Projects({ triggerAlert }: { triggerAlert: (message: string, severity?:
         fetchProjects();
     }, [fetchProjects]);
 
-    const handleProjectClick = (projectId: string) => {
-        navigate(`/projects/${projectId}/issues`);
+    const handleProjectClick = (issuePrefix: string) => {
+        navigate(`/projects/${issuePrefix}/issues`);
     };
 
     return <>
@@ -79,7 +81,7 @@ function Projects({ triggerAlert }: { triggerAlert: (message: string, severity?:
                         <Card 
                             key={project.id} 
                             className={'project-card'}
-                            onClick={() => handleProjectClick(project.id)}
+                            onClick={() => handleProjectClick(project.issuePrefix)}
                             sx={{ cursor: 'pointer', '&:hover': { boxShadow: 4 } }}
                         >
                             <Typography variant={"h6"}>{project.name} ({project.issuePrefix})</Typography>

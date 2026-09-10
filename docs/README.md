@@ -9,6 +9,7 @@ in the same PR.
 | [product-vision.md](product-vision.md) | What Project Monitor is for and the principles behind it |
 | [domain-model.md](domain-model.md) | Conceptual state of Issue, Actor/Assignee and Session; what is decided and what is still open |
 | [development-workflow.md](development-workflow.md) | How work is organised: issues, branches, PRs, merges |
+| [ui-architecture.md](ui-architecture.md) | Frontend layers (RMZ-UI vs app), navigation, URLs and the direction of the screens |
 | [current-state.md](current-state.md) | What is actually implemented as of the latest completed issue |
 
 Rule of thumb: the docs describe direction and decisions; the code describes what exists.

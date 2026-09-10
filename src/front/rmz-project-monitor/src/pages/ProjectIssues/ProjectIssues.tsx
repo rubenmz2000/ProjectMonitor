@@ -3,9 +3,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button, Typography, CircularProgress, Alert, Box, Card } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import type { Project } from '../../models/ProjectModel.ts';
 import type { Issue } from '../../models/IssueModel.ts';
-import { getProjectById, getProjectIssues } from '../../serivces/ApiService.ts';
+import { getProjectIssues } from '../../serivces/ApiService.ts';
+import { useAlert } from '../../rmz-ui/index.ts';
+import { useRouteProject } from '../../app/shell/useRouteProject.ts';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -15,29 +16,26 @@ import './ProjectIssues.css';
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
 
-function ProjectIssues({ triggerAlert }: { triggerAlert: (message: string, severity?: string) => void }) {
-    const { projectId } = useParams<{ projectId: string }>();
+function ProjectIssues() {
+    const { prefix } = useParams<{ prefix: string }>();
     const navigate = useNavigate();
-    const [project, setProject] = useState<Project | null>(null);
+    const { notify } = useAlert();
+    const { project, loading: projectLoading, notFound } = useRouteProject();
     const [issues, setIssues] = useState<Issue[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    const fetchData = useCallback(async () => {
+    const projectId = project?.id ?? null;
+
+    const fetchIssues = useCallback(async () => {
         if (!projectId) return;
         setLoading(true);
         setError(null);
         try {
-            const [projectData, issuesData] = await Promise.all([
-                getProjectById(projectId),
-                getProjectIssues(projectId)
-            ]);
-            setProject(projectData);
-            setIssues(issuesData);
-        } catch (err) {
-            setError('Failed to load project or issues');
-            setProject(null);
+            setIssues(await getProjectIssues(projectId));
+        } catch {
+            setError('Failed to load issues');
             setIssues([]);
         } finally {
             setLoading(false);
@@ -45,8 +43,8 @@ function ProjectIssues({ triggerAlert }: { triggerAlert: (message: string, sever
     }, [projectId]);
 
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        fetchIssues();
+    }, [fetchIssues]);
 
     const handleCreateIssue = () => {
         setDialogOpen(true);
@@ -54,10 +52,10 @@ function ProjectIssues({ triggerAlert }: { triggerAlert: (message: string, sever
 
     const handleDialogClose = (result: string, issueIdentifier?: string) => {
         if (result === 'submit') {
-            triggerAlert(`Issue ${issueIdentifier} created successfully`, 'success');
-            fetchData();
+            notify(`Issue ${issueIdentifier} created successfully`, 'success');
+            fetchIssues();
         } else if (result === 'error') {
-            triggerAlert('An error occurred while creating the issue', 'error');
+            notify('An error occurred while creating the issue', 'error');
         }
         setDialogOpen(false);
     };
@@ -66,27 +64,29 @@ function ProjectIssues({ triggerAlert }: { triggerAlert: (message: string, sever
         navigate('/projects');
     };
 
+    const busy = projectLoading || (project !== null && loading);
+
     return <>
         <div className={'card-container'} style={{ padding: '20px' }}>
             <Button startIcon={<ArrowBackIcon />} onClick={handleBack} sx={{ mb: 2 }}>
                 Back to Projects
             </Button>
 
-            {loading ? (
+            {busy ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
                     <CircularProgress />
                 </Box>
+            ) : notFound || !project ? (
+                <Typography variant="body1" className="empty-state" sx={{ py: 4, textAlign: 'center' }}>
+                    Project "{prefix}" not found.
+                </Typography>
             ) : error ? (
                 <Alert severity="error" sx={{ width: '100%' }}>
                     {error}
-                    <Button onClick={fetchData} sx={{ ml: 2 }} size="small" variant="outlined">
+                    <Button onClick={fetchIssues} sx={{ ml: 2 }} size="small" variant="outlined">
                         Retry
                     </Button>
                 </Alert>
-            ) : !project ? (
-                <Typography variant="body1" className="empty-state" sx={{ py: 4, textAlign: 'center' }}>
-                    Project not found.
-                </Typography>
             ) : (
                 <>
                     <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -144,7 +144,7 @@ function ProjectIssues({ triggerAlert }: { triggerAlert: (message: string, sever
         {project && (
             <CreateIssueDialog
                 open={dialogOpen}
-                projectId={projectId!}
+                projectId={project.id}
                 issuePrefix={project.issuePrefix}
                 onClose={handleDialogClose}
             />

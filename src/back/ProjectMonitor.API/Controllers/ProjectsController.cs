@@ -44,6 +44,27 @@ public class ProjectsController(IRepository<Project> projectRepository) : Contro
         });
     }
 
+    /// <summary>
+    /// Resolves a project by its human issue prefix (e.g. "PM"). The length constraint keeps this
+    /// route from overlapping with the GUID route above (a GUID is always longer than 5 chars).
+    /// </summary>
+    [HttpGet("{prefix:length(1,5)}")]
+    public IActionResult GetByPrefix(string prefix)
+    {
+        var normalized = prefix.ToUpperInvariant();
+        var project = projectRepository.GetAll(p => p.IssuePrefix == normalized && !p.IsDeleted).FirstOrDefault();
+        if (project == null) return NotFound();
+        return Ok(new ProjectResponseDto
+        {
+            Id = project.Id,
+            Name = project.Name,
+            Description = project.Description,
+            IssuePrefix = project.IssuePrefix,
+            Status = project.Status,
+            UpdatedAt = project.UpdatedAt
+        });
+    }
+
     [HttpGet("latest")]
     public IActionResult GetLatestProjects()
     {
