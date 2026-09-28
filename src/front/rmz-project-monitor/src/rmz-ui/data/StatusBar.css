@@ -1,0 +1,43 @@
+.rmz-status-bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.rmz-status-bar__track {
+    display: flex;
+    height: 10px;
+    width: 100%;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--bg-elevated);
+}
+
+.rmz-status-bar__segment {
+    min-width: 2px;
+    transition: flex-grow 0.2s ease;
+}
+
+.rmz-status-bar__empty {
+    width: 100%;
+    background: var(--bg-elevated);
+}
+
+.rmz-status-bar__legend {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+}
+
+.rmz-status-bar__legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.rmz-status-bar__legend-value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}

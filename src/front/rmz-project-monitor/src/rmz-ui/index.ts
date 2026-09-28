@@ -19,3 +19,12 @@ export { default as Brand } from './shell/Brand.tsx';
 export { default as AlertProvider } from './feedback/AlertProvider.tsx';
 export { useAlert } from './feedback/useAlert.ts';
 export type { AlertApi, AlertSeverity } from './feedback/AlertContext.ts';
+
+export { default as StatTile } from './data/StatTile.tsx';
+export type { StatTileProps } from './data/StatTile.tsx';
+export { default as StatusBar } from './data/StatusBar.tsx';
+export type { StatusBarProps, StatusBarSegment } from './data/StatusBar.tsx';
+export { default as StatusDot } from './data/StatusDot.tsx';
+export type { StatusDotProps } from './data/StatusDot.tsx';
+export { default as EmptyState } from './data/EmptyState.tsx';
+export type { EmptyStateProps } from './data/EmptyState.tsx';

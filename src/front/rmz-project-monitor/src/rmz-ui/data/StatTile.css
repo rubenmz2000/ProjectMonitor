@@ -1,0 +1,51 @@
+.rmz-stat-tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    min-width: 0;
+}
+
+.rmz-stat-tile__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-muted);
+}
+
+.rmz-stat-tile__label {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rmz-stat-tile__icon {
+    display: inline-flex;
+    color: var(--blue-bright);
+    flex-shrink: 0;
+}
+
+.rmz-stat-tile__icon svg {
+    font-size: 1.1rem;
+}
+
+.rmz-stat-tile__value {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.1;
+    color: var(--text);
+}
+
+.rmz-stat-tile__hint {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
