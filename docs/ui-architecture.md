@@ -55,8 +55,12 @@ MUI components get their colors from the theme. Both come from `tokens.ts`.
 
 ## Screens (direction)
 
-**Projects / Dashboard.** A dense list (table or grid) with prefix, status and issue counts.
-The current dashboard (recent projects + status pie) is provisional and will be replaced.
+**Projects.** Implemented (PM-0009): a dense, searchable table with prefix, name/description,
+status and a per-status issue breakdown, plus project creation.
+
+**Home / Dashboard.** Implemented (PM-0009): stat tiles, projects/issues status breakdowns and
+a recent-projects panel, built on RMZ-UI so more panels (issues activity, Iris/Sessions, builds,
+deployments, costs) can be added as the data behind them exists.
 
 **Project page.** Header with name, prefix, status and description; a list of issues as a
 table with search, filters (status, assignee, priority) and sorting, done client-side while
