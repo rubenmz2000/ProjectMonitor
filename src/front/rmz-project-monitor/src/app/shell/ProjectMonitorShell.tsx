@@ -31,7 +31,8 @@ function ShellFrame() {
             key: `project-${prefix}`,
             title: project ? `${project.name} (${prefix})` : prefix,
             items: [
-                { key: 'issues', label: 'Issues', to: `/projects/${prefix}/issues`, icon: <ListAltIcon /> },
+                // An issue page belongs to its project's issues, although its URL is /issues/:identifier
+                { key: 'issues', label: 'Issues', to: `/projects/${prefix}/issues`, icon: <ListAltIcon />, active: !!issueIdentifier },
             ],
         });
     }

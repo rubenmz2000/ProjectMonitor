@@ -1,11 +1,6 @@
-import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
 import type { Actor } from '../../models/ActorModel.ts';
+import ActorMarker from './ActorMarker.tsx';
 import './ActorLabel.css';
-
-function initials(displayName: string): string {
-    const parts = displayName.trim().split(/\s+/).filter(Boolean);
-    return parts.slice(0, 2).map((p) => p[0]).join('').toUpperCase() || '?';
-}
 
 /**
  * Compact representation of an actor: a small marker (initials for humans, an agent glyph for
@@ -18,9 +13,7 @@ function ActorLabel({ actor }: { actor: Actor | null }) {
     const isAgent = actor.kind === 'Agent';
     return (
         <span className="rmz-actor-label" title={isAgent ? `${actor.displayName} (agent)` : actor.displayName}>
-            <span className={`rmz-actor-label__marker${isAgent ? ' rmz-actor-label__marker--agent' : ''}`} aria-hidden>
-                {isAgent ? <SmartToyOutlinedIcon /> : initials(actor.displayName)}
-            </span>
+            <ActorMarker actor={actor} />
             <span className="rmz-actor-label__name">{actor.displayName}</span>
         </span>
     );

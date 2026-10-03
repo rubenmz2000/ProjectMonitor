@@ -13,6 +13,8 @@ export interface SidebarItem {
     icon?: ReactNode;
     /** Match the route exactly (NavLink `end`). */
     end?: boolean;
+    /** Forces the active state when the current route belongs to this item without matching its URL. */
+    active?: boolean;
 }
 
 export interface SidebarSection {
@@ -53,7 +55,7 @@ function Sidebar({ sections, collapsed, onToggle, homeTo = '/' }: SidebarProps) 
                                     <NavLink
                                         to={item.to}
                                         end={item.end}
-                                        className={({ isActive }) => `rmz-sidebar__item${isActive ? ' rmz-sidebar__item--active' : ''}`}
+                                        className={({ isActive }) => `rmz-sidebar__item${isActive || item.active ? ' rmz-sidebar__item--active' : ''}`}
                                     >
                                         <span className="rmz-sidebar__item-icon">{item.icon}</span>
                                         {!collapsed && <span className="rmz-sidebar__item-label">{item.label}</span>}

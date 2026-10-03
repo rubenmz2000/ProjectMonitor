@@ -28,7 +28,7 @@ src/rmz-ui/            Reusable (generic) — tokens, theme, shell, layout, data
   theme/RmzThemeProvider ThemeProvider + CssBaseline + CSS custom properties (--bg, --text, ...)
   shell/                 AppShell (grid), Sidebar (data-driven sections), TopBar, Breadcrumbs, Brand
   layout/                PageHeader (title row with leading/adornment/actions, body below)
-  data/                  StatTile, StatusBar, StatusDot, EmptyState
+  data/                  StatTile, StatusBar, StatusDot, EmptyState, PropertyList, Timeline
   filters/               MultiSelectFilter (dropdown multi-selection with optional color and count)
   feedback/              AlertProvider / useAlert (snackbar notifications)
 src/app/               Project Monitor composition
@@ -37,7 +37,10 @@ src/app/               Project Monitor composition
   shell/CurrentActorChip     Who the app is acting as (from VITE_ACTOR_IDENTIFIER, for now)
   project/ProjectWorkspace   Layout of every /projects/:prefix/* page: project header + outlet
   issues/useIssueListState   Search, filters and sort of an issue list, kept in the URL
-  domain/, data/, actors/    Status/priority presentation, data hooks, ActorLabel
+  issues/                    Issue workspace parts: details panel, assignee editor, activity
+                             timeline (type → renderer map) and comment composer
+  domain/, data/, actors/, time/   Status/priority presentation, data hooks, actor label and
+                             marker, relative time
 src/pages/, src/components/, src/models/, src/serivces/   Feature code
 ```
 
@@ -48,7 +51,8 @@ MUI components get their colors from the theme. Both come from `tokens.ts`.
 
 - Left sidebar is the main navigation: a global section (Dashboard, Projects) and, when the
   route belongs to a project, a contextual section for that project. Sections are data, so
-  future areas are new entries, not new components.
+  future areas are new entries, not new components. An item can be marked `active` when the
+  route belongs to it without matching its URL (e.g. "Issues" while viewing an issue).
 - Top bar: breadcrumbs (Projects › Project › Issue) on the left, the current actor on the right.
 - URLs use the project's human prefix; the GUID stays internal:
   - `/` dashboard
@@ -78,12 +82,20 @@ summarise. The issues page is a dense table (key, title, status, priority, assig
 updated) with search by key or title, multi-select filters (status, assignee, priority) and
 column sorting, all client-side and kept in the URL. Default: key descending, all statuses shown.
 
-**Issue workspace.** Two columns. Left, *what the issue is and what happened*: identifier and
-title, the description as real content (it is the source of truth), and the activity timeline
-with a comment composer. Right, *what state it is in*: status (read-only badge until real
-status changes exist), assignee (with an optional note on change), priority, reporter, dates,
-project. New activity types render through a `type → renderer` map so adding one is an entry,
-not a redesign.
+**Issue workspace.** Implemented (PM-0011). Full-width header (identifier chip, title as h1),
+then two columns. Left, *what the issue is and what happened*: the description as real content
+(it is the source of truth) and the activity timeline, oldest first, with the comment composer
+at the end (Ctrl/Cmd+Enter sends). Changes render as compact events, comments as blocks. Right,
+*what state it is in* (sticky; above the content on narrow screens): status (read-only until
+real status changes exist), assignee (changed through a popover with an optional note recorded
+in the activity), priority, due date, reporter, project, created and updated. New activity
+types render through a `type → renderer` map (`app/issues/activity/activityRenderers.tsx`), so
+adding one is an entry, not a redesign.
+
+Navigation decision (PM-0011): structural links (breadcrumb, sidebar, project link) always go
+to `/projects/:prefix/issues` without trying to rebuild the previous list context. The list's
+search/filters/sort live in its URL, so the browser's Back button returns to them; the issue
+workspace does not depend on ephemeral navigation state.
 
 ## Open questions
 

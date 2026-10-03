@@ -1,0 +1,40 @@
+.rmz-property-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.rmz-property-list__row {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 36px;
+    padding: var(--space-1) 0;
+}
+
+.rmz-property-list__label {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.rmz-property-list__value {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin: 0;
+    min-width: 0;
+    font-size: 0.85rem;
+    color: var(--text);
+}
+
+.rmz-property-list__content {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rmz-property-list__action {
+    flex-shrink: 0;
+}

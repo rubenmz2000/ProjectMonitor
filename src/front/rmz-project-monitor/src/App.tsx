@@ -5,7 +5,7 @@ import ProjectWorkspace from './app/project/ProjectWorkspace.tsx';
 import Dashboard from './pages/Dashboard/Dashboard.tsx';
 import Projects from './pages/Projects/Projects.tsx';
 import ProjectIssues from './pages/ProjectIssues/ProjectIssues.tsx';
-import IssueDetail from './pages/IssueDetail/IssueDetail.tsx';
+import IssueWorkspace from './pages/IssueWorkspace/IssueWorkspace.tsx';
 
 function App() {
     return (
@@ -21,7 +21,7 @@ function App() {
                                 <Route index element={<Navigate to="issues" replace />} />
                                 <Route path="issues" element={<ProjectIssues />} />
                             </Route>
-                            <Route path="/issues/:issueIdentifier" element={<IssueDetail />} />
+                            <Route path="/issues/:issueIdentifier" element={<IssueWorkspace />} />
                             <Route path="*" element={<Navigate to="/" replace />} />
                         </Route>
                     </Routes>
