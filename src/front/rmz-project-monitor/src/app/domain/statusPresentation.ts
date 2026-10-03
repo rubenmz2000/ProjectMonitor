@@ -1,10 +1,11 @@
 /**
- * Human labels and theme colors for the status enums, in one place so the Projects list and the
- * Home dashboard render them consistently. Colors come from rmzTokens, never hardcoded.
+ * Human labels and theme colors for the status and priority enums, in one place so every screen
+ * renders them consistently. Colors come from rmzTokens, never hardcoded.
  */
 import { rmzTokens } from '../../rmz-ui/index.ts';
 import { ProjectStatus } from '../../models/enums/ProjectStatus.ts';
 import { IssueStatus } from '../../models/enums/IssueStatus.ts';
+import { Priority } from '../../models/enums/Priority.ts';
 
 const c = rmzTokens.color;
 
@@ -54,4 +55,19 @@ export const ISSUE_STATUS_COLORS: Record<IssueStatus, string> = {
     Blocked: c.warning,
     Done: c.success,
     Cancelled: c.danger,
+};
+
+/** Ascending importance; used to sort and to list priorities consistently. */
+export const PRIORITY_ORDER: Priority[] = [
+    Priority.Low,
+    Priority.Medium,
+    Priority.High,
+    Priority.Critical,
+];
+
+export const PRIORITY_LABELS: Record<Priority, string> = {
+    Low: 'Low',
+    Medium: 'Medium',
+    High: 'High',
+    Critical: 'Critical',
 };

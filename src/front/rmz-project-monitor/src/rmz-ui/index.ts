@@ -28,3 +28,9 @@ export { default as StatusDot } from './data/StatusDot.tsx';
 export type { StatusDotProps } from './data/StatusDot.tsx';
 export { default as EmptyState } from './data/EmptyState.tsx';
 export type { EmptyStateProps } from './data/EmptyState.tsx';
+
+export { default as PageHeader } from './layout/PageHeader.tsx';
+export type { PageHeaderProps } from './layout/PageHeader.tsx';
+
+export { default as MultiSelectFilter } from './filters/MultiSelectFilter.tsx';
+export type { MultiSelectFilterOption, MultiSelectFilterProps } from './filters/MultiSelectFilter.tsx';

@@ -1,28 +1,102 @@
-.empty-state {
-    color: var(--text-muted);
-}
-
-/*
- * Legacy list/card styles, kept here only for this not-yet-redesigned page (PM-0010).
- * They used to live in Dashboard.css and leaked in globally; Dashboard and Projects now own
- * their own styles (PM-0009), so this page carries its own copy instead of depending on them.
- */
-.card-container {
-    padding: 10px;
+.rmz-issues-page {
     display: flex;
     flex-direction: column;
+    gap: var(--space-3);
+}
+
+.rmz-issues-page__toolbar {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-4);
+    flex-wrap: wrap;
 }
 
-.projects-list {
+.rmz-issues-page__filters {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-top: 20px;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
 }
 
-.project-card {
-    background: var(--bg-surface) !important;
-    width: 400px;
-    padding: 10px;
+.rmz-issues-page__search {
+    width: 260px;
+}
+
+.rmz-issues-page__count {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.rmz-issues-page__card {
+    overflow: hidden;
+}
+
+.rmz-issues-page__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-7) 0;
+}
+
+.rmz-issues-table__row {
+    cursor: pointer;
+}
+
+.rmz-issues-table__row:focus-visible {
+    outline: 1px solid var(--blue-bright);
+    outline-offset: -1px;
+}
+
+.rmz-issues-table__row--new {
+    animation: rmz-issues-table-new 3s ease-out;
+}
+
+@keyframes rmz-issues-table-new {
+    from {
+        background-color: var(--blue-glow);
+    }
+    to {
+        background-color: transparent;
+    }
+}
+
+.rmz-issues-table__key {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    white-space: nowrap;
+    width: 1%;
+}
+
+.rmz-issues-table__key a {
+    color: var(--blue-bright);
+    text-decoration: none;
+}
+
+.rmz-issues-table__key a:hover {
+    text-decoration: underline;
+}
+
+.rmz-issues-table__title {
+    font-weight: 500;
+    color: var(--text);
+    max-width: 0;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rmz-issues-table__priority {
+    white-space: nowrap;
+}
+
+.rmz-issues-table__assignee {
+    max-width: 180px;
+}
+
+.rmz-issues-table__muted {
+    color: var(--text-muted);
+    white-space: nowrap;
 }
