@@ -1,0 +1,50 @@
+.rmz-page-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.rmz-page-header__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.rmz-page-header__heading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.rmz-page-header__leading,
+.rmz-page-header__adornment {
+    display: flex;
+    align-items: center;
+}
+
+.rmz-page-header__title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.rmz-page-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.rmz-page-header__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}

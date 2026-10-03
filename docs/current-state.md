@@ -1,4 +1,4 @@
-# Current state (as of PM-0008)
+# Current state (as of PM-0010)
 
 What actually exists in the repository. Update this when an issue is merged; keep it a snapshot,
 not a changelog (the git history is the changelog).
@@ -16,6 +16,7 @@ not a changelog (the git history is the changelog).
 | PM-0007 | `IssueActivity` append-only history (`Created`, `AssigneeChanged`, `Comment`), actor mandatory on all issue mutations, comments and activity endpoints, activity panel in the issue detail |
 | PM-0008 | UI foundation: RMZ-UI tokens + MUI dark theme, app shell (sidebar, top bar, breadcrumbs, current actor), alert context, project routes by prefix |
 | PM-0009 | Projects and Home redesigned on the PM-0008 app shell: Projects is a dense table (prefix, status, per-status issue breakdown, updated) with search; Home is a real overview (stat tiles, projects/issues status breakdowns, recent projects), replacing the recharts pie chart |
+| PM-0010 | Project workspace: shared project layout and header (no tabs), issues as a dense table with search, filters and sorting kept in the URL, issue creation integrated in the header |
 
 PM-0001 to PM-0003 were numbered provisionally, before Project Monitor could manage its own
 workflow.
@@ -44,8 +45,8 @@ workflow.
 
 ## Frontend
 
-- Routes: `/` (dashboard), `/projects`, `/projects/:prefix` (redirects to issues),
-  `/projects/:prefix/issues`, `/issues/:issueIdentifier`.
+- Routes: `/` (dashboard), `/projects`, `/projects/:prefix` (project workspace layout; index
+  redirects to issues), `/projects/:prefix/issues`, `/issues/:issueIdentifier`.
 - App shell (`src/app/shell`): left sidebar with global navigation plus a contextual section for
   the project of the current route, top bar with breadcrumbs and the current actor chip.
 - RMZ-UI (`src/rmz-ui`): tokens, MUI dark theme via `RmzThemeProvider`, generic shell
@@ -56,8 +57,11 @@ workflow.
   table; Home is an overview with stat tiles, projects/issues status breakdowns (`StatusBar`)
   and a recent-projects panel. Both derive their data client-side via `useProjectsOverview`
   (fetches every project's issues; no aggregate endpoint yet).
-- Issue list (`ProjectIssues`) and issue detail are still the provisional pages; they are
-  redesigned in PM-0010 and PM-0011.
+- Project workspace (PM-0010): `ProjectWorkspace` layout with the project header (prefix, name,
+  status, description, issue breakdown) and issue creation; the issues page is a dense table with
+  search, status/assignee/priority filters and column sorting, client-side and kept in the URL.
+  Issues without a due date (the `DateTime.MinValue` sentinel) are shown as "—".
+- The issue detail is still the provisional page; it is redesigned in PM-0011.
 
 ## Known gaps and rough edges
 

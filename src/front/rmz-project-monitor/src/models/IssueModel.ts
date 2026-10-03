@@ -2,6 +2,7 @@ import type { Actor } from './ActorModel.ts';
 
 export interface Issue {
     id: string;
+    issueNumber: number;
     issueIdentifier: string;
     title: string;
     description: string;

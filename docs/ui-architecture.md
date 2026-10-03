@@ -22,17 +22,23 @@ and the shape of the screens to come. Screens that do not exist yet are directio
 ## Frontend layers
 
 ```
-src/rmz-ui/            Reusable (generic) — tokens, theme, shell, feedback
+src/rmz-ui/            Reusable (generic) — tokens, theme, shell, layout, data, filters, feedback
   theme/tokens.ts        Single source of truth: colors, fonts, spacing, radius, layout sizes
   theme/createRmzTheme   MUI dark theme derived from the tokens
   theme/RmzThemeProvider ThemeProvider + CssBaseline + CSS custom properties (--bg, --text, ...)
   shell/                 AppShell (grid), Sidebar (data-driven sections), TopBar, Breadcrumbs, Brand
+  layout/                PageHeader (title row with leading/adornment/actions, body below)
+  data/                  StatTile, StatusBar, StatusDot, EmptyState
+  filters/               MultiSelectFilter (dropdown multi-selection with optional color and count)
   feedback/              AlertProvider / useAlert (snackbar notifications)
 src/app/               Project Monitor composition
   shell/ProjectMonitorShell  Sidebar sections, breadcrumbs and current actor for this app
   shell/RouteProject*        Resolves the project of the current route (by prefix)
   shell/CurrentActorChip     Who the app is acting as (from VITE_ACTOR_IDENTIFIER, for now)
-src/pages/, src/components/, src/models/, src/serivces/   Feature code (pages are still provisional)
+  project/ProjectWorkspace   Layout of every /projects/:prefix/* page: project header + outlet
+  issues/useIssueListState   Search, filters and sort of an issue list, kept in the URL
+  domain/, data/, actors/    Status/priority presentation, data hooks, ActorLabel
+src/pages/, src/components/, src/models/, src/serivces/   Feature code
 ```
 
 Plain CSS files may use the CSS custom properties (`var(--text-muted)`, `var(--space-4)`...);
@@ -47,8 +53,8 @@ MUI components get their colors from the theme. Both come from `tokens.ts`.
 - URLs use the project's human prefix; the GUID stays internal:
   - `/` dashboard
   - `/projects`
-  - `/projects/:prefix` (redirects to the project's issues until the project page exists)
-  - `/projects/:prefix/issues`
+  - `/projects/:prefix` — the project workspace layout; its index redirects to `issues`
+  - `/projects/:prefix/issues` (query string: `q`, `status`, `assignee`, `priority`, `sort`)
   - `/issues/:identifier` — the identifier carries the project, so the shell derives context
     from it; the route is not duplicated under `/projects`.
 - The API resolves a project by prefix (`GET /api/projects/{prefix}`).
@@ -62,10 +68,15 @@ status and a per-status issue breakdown, plus project creation.
 a recent-projects panel, built on RMZ-UI so more panels (issues activity, Iris/Sessions, builds,
 deployments, costs) can be added as the data behind them exists.
 
-**Project page.** Header with name, prefix, status and description; a list of issues as a
-table with search, filters (status, assignee, priority) and sorting, done client-side while
-volumes are small. The concrete structure of the page (tabs, overview content) is decided in the
-issue that builds it, not here.
+**Project workspace.** Implemented (PM-0010). Decided: **no `Overview | Issues` tabs.** Every
+project page renders inside `ProjectWorkspace`, which shows the project header (prefix, name,
+status, description clamped to two lines, last update, issue count and per-status breakdown)
+and owns the issue creation flow ("New issue"). Future project areas (Sessions, repositories,
+builds…) become child routes of `/projects/:prefix` plus an entry in the project's sidebar
+section, and inherit the header; an overview page appears only when there is something real to
+summarise. The issues page is a dense table (key, title, status, priority, assignee, due,
+updated) with search by key or title, multi-select filters (status, assignee, priority) and
+column sorting, all client-side and kept in the URL. Default: key descending, all statuses shown.
 
 **Issue workspace.** Two columns. Left, *what the issue is and what happened*: identifier and
 title, the description as real content (it is the source of truth), and the activity timeline
