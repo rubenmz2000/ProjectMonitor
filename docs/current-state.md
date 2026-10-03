@@ -15,6 +15,7 @@ not a changelog (the git history is the changelog).
 | PM-0006 | Rename `ProjectTask` → `Issue` everywhere (code, database via rename migration, API, UI, docs); description length limit removed |
 | PM-0007 | `IssueActivity` append-only history (`Created`, `AssigneeChanged`, `Comment`), actor mandatory on all issue mutations, comments and activity endpoints, activity panel in the issue detail |
 | PM-0008 | UI foundation: RMZ-UI tokens + MUI dark theme, app shell (sidebar, top bar, breadcrumbs, current actor), alert context, project routes by prefix |
+| PM-0009 | Projects and Home redesigned on the PM-0008 app shell: Projects is a dense table (prefix, status, per-status issue breakdown, updated) with search; Home is a real overview (stat tiles, projects/issues status breakdowns, recent projects), replacing the recharts pie chart |
 
 PM-0001 to PM-0003 were numbered provisionally, before Project Monitor could manage its own
 workflow.
@@ -51,8 +52,12 @@ workflow.
   components and `useAlert()`; no application concepts inside.
 - Actor identity is injected on state-changing requests from `VITE_ACTOR_IDENTIFIER` and shown
   in the top bar.
-- The pages themselves (dashboard, project list, issue list, issue detail) are still the
-  provisional ones, now rendered inside the shell; they are redesigned in the following issues.
+- Dashboard and Projects are redesigned (PM-0009) on RMZ-UI: Projects is a dense, searchable
+  table; Home is an overview with stat tiles, projects/issues status breakdowns (`StatusBar`)
+  and a recent-projects panel. Both derive their data client-side via `useProjectsOverview`
+  (fetches every project's issues; no aggregate endpoint yet).
+- Issue list (`ProjectIssues`) and issue detail are still the provisional pages; they are
+  redesigned in PM-0010 and PM-0011.
 
 ## Known gaps and rough edges
 
@@ -62,3 +67,6 @@ workflow.
   unique index).
 - The issue list endpoint returns the `DateTime.MinValue` sentinel for issues with no due date.
 - API base URL is hardcoded in the frontend; the frontend `.env` is committed.
+- Per-project and total issue counts on Projects/Home are computed client-side by fetching
+  every project's issues; there is no aggregate endpoint. Fine while the number of projects
+  stays small, but it is N+1 requests.

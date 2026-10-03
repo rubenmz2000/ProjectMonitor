@@ -1,3 +1,28 @@
 .empty-state {
     color: var(--text-muted);
 }
+
+/*
+ * Legacy list/card styles, kept here only for this not-yet-redesigned page (PM-0010).
+ * They used to live in Dashboard.css and leaked in globally; Dashboard and Projects now own
+ * their own styles (PM-0009), so this page carries its own copy instead of depending on them.
+ */
+.card-container {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.project-card {
+    background: var(--bg-surface) !important;
+    width: 400px;
+    padding: 10px;
+}
