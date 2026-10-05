@@ -1,0 +1,103 @@
+.rmz-activity__loading {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-5) 0;
+}
+
+.rmz-activity__empty {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.rmz-activity__event-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+}
+
+.rmz-activity__event-icon svg {
+    font-size: 0.85rem;
+}
+
+.rmz-activity__line strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.rmz-activity__actor {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.rmz-activity__time {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.rmz-activity__note {
+    margin: var(--space-2) 0 0;
+    padding: var(--space-1) var(--space-3);
+    border-left: 2px solid var(--border);
+    color: var(--text);
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.rmz-activity__comment-header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+    font-size: 0.85rem;
+}
+
+.rmz-activity__comment-body {
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.rmz-comment-composer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.rmz-comment-composer__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.rmz-comment-composer__as {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.rmz-comment-composer__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.rmz-comment-composer__hint {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+}

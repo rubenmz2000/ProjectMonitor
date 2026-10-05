@@ -1,4 +1,4 @@
-# Current state (as of PM-0010)
+# Current state (as of PM-0011)
 
 What actually exists in the repository. Update this when an issue is merged; keep it a snapshot,
 not a changelog (the git history is the changelog).
@@ -17,6 +17,7 @@ not a changelog (the git history is the changelog).
 | PM-0008 | UI foundation: RMZ-UI tokens + MUI dark theme, app shell (sidebar, top bar, breadcrumbs, current actor), alert context, project routes by prefix |
 | PM-0009 | Projects and Home redesigned on the PM-0008 app shell: Projects is a dense table (prefix, status, per-status issue breakdown, updated) with search; Home is a real overview (stat tiles, projects/issues status breakdowns, recent projects), replacing the recharts pie chart |
 | PM-0010 | Project workspace: shared project layout and header (no tabs), issues as a dense table with search, filters and sorting kept in the URL, issue creation integrated in the header |
+| PM-0011 | Issue workspace replaces the provisional detail: title and description as content, chronological activity timeline with comment composer, details column (read-only status/priority/dates/reporter/project), assignee change with optional note |
 
 PM-0001 to PM-0003 were numbered provisionally, before Project Monitor could manage its own
 workflow.
@@ -61,7 +62,12 @@ workflow.
   status, description, issue breakdown) and issue creation; the issues page is a dense table with
   search, status/assignee/priority filters and column sorting, client-side and kept in the URL.
   Issues without a due date (the `DateTime.MinValue` sentinel) are shown as "—".
-- The issue detail is still the provisional page; it is redesigned in PM-0011.
+- Issue workspace (PM-0011) at `/issues/:identifier`: header with identifier and title; main
+  column with the description and the activity timeline (events and comments, comment
+  composer); details column with status, assignee (popover with optional note), priority, due
+  date, reporter, project, created and updated. Only the assignee and comments can be changed;
+  title, description, status and the other fields are read-only. The project's "Issues" sidebar
+  entry stays active inside an issue.
 
 ## Known gaps and rough edges
 

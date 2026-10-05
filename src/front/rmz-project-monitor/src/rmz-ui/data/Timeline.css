@@ -1,0 +1,55 @@
+.rmz-timeline {
+    --rmz-timeline-marker: 24px;
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+/* The line joining the markers, centred under them */
+.rmz-timeline::before {
+    content: '';
+    position: absolute;
+    top: var(--space-2);
+    bottom: var(--space-2);
+    left: calc(var(--rmz-timeline-marker) / 2);
+    width: 1px;
+    background: var(--border-subtle);
+}
+
+.rmz-timeline__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--rmz-timeline-marker) minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: start;
+}
+
+.rmz-timeline__marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--rmz-timeline-marker);
+    height: var(--rmz-timeline-marker);
+    background: var(--bg);
+    z-index: 1;
+}
+
+.rmz-timeline__item--event .rmz-timeline__content {
+    min-height: var(--rmz-timeline-marker);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.rmz-timeline__item--block .rmz-timeline__content {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+}

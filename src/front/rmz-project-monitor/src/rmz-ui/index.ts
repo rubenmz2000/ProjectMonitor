@@ -34,3 +34,8 @@ export type { PageHeaderProps } from './layout/PageHeader.tsx';
 
 export { default as MultiSelectFilter } from './filters/MultiSelectFilter.tsx';
 export type { MultiSelectFilterOption, MultiSelectFilterProps } from './filters/MultiSelectFilter.tsx';
+
+export { default as PropertyList } from './data/PropertyList.tsx';
+export type { PropertyListItem } from './data/PropertyList.tsx';
+export { default as Timeline, TimelineItem } from './data/Timeline.tsx';
+export type { TimelineItemProps } from './data/Timeline.tsx';

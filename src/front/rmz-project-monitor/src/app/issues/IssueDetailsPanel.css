@@ -1,0 +1,45 @@
+.rmz-issue-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-5);
+}
+
+.rmz-issue-details__muted {
+    color: var(--text-muted);
+}
+
+.rmz-issue-details__project {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    color: var(--text);
+    text-decoration: none;
+}
+
+.rmz-issue-details__project:hover .rmz-issue-details__project-name {
+    text-decoration: underline;
+}
+
+.rmz-issue-details__prefix {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rmz-issue-details__project-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rmz-issue-details__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
